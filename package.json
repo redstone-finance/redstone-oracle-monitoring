@@ -1,0 +1,9 @@
+{
+  "dependencies": {
+    "axios": "^0.24.0",
+    "consola": "^2.15.3",
+    "mailgun-js": "^0.22.0",
+    "mongoose": "^6.1.6",
+    "node-schedule": "^2.1.0"
+  }
+}
