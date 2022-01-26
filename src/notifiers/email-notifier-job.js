@@ -3,7 +3,8 @@ const consola = require("consola");
 const mongodbInfo = require("../../.secrets/mongodb.json");
 const Notification = require("../models/notification");
 const Mail = require("../models/mail");
-const { notify } = require("./email-notifier-mailgun");
+//const { notify } = require("./email-notifier-mailgun");   TODO
+const { notify } = require("./email-notifier-ses.js");
 
 const MIN_MAIL_INTERVAL = 3 * 3600 * 1000; // 3 hours
 const MONGO_DASHBOARD_URL = mongodbInfo.mongoDashboardURL;
