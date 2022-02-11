@@ -1,10 +1,15 @@
 {
+  "scripts": {
+    "start": "Node ./src/run-monitoring-service.js",
+    "prepare": "yarn build"
+  },
   "dependencies": {
     "aws-sdk": "^2.1061.0",
     "axios": "^0.24.0",
     "consola": "^2.15.3",
     "mailgun-js": "^0.22.0",
     "mongoose": "^6.1.6",
-    "node-schedule": "^2.1.0"
+    "node-schedule": "^2.1.0",
+    "streamr-client": "^5.4.5"
   }
 }

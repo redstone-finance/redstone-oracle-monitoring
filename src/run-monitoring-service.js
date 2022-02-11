@@ -1,14 +1,15 @@
 const schedule = require("node-schedule");
 const consola = require("consola");
-const config = require("./monitoring-service-configuration");
+const config = require("../default-data-sources/redstone-avalanche.json");      //require("./monitoring-service-configuration");
 const { connectToRemoteMongo } = require("./db-connector");
 const { execute: executeEmailNotifierJob } = require("./notifiers/email-notifier-job");
-const { execute: executeSourceCheckerJob } = require("./source-monitoring/source-checker-job");
-
+const JobApi = require("./source-monitoring/source-checker-job-Api");
+const JobStreamr = require("./source-monitoring/source-checker-job-Streamr");
 const EVERY_10_SECONDS = "*/10 * * * * *";
 
 connectToRemoteMongo();
 const logger = consola.withTag("run-monitoring-service.js");
+
 
 logger.info("Starting the email notifier job");
 schedule.scheduleJob(EVERY_10_SECONDS, async () => {
@@ -16,12 +17,24 @@ schedule.scheduleJob(EVERY_10_SECONDS, async () => {
   await executeEmailNotifierJob();
 });
 
-logger.info("Starting source monitoring jobs");
-for (const source of config.sources) {
+
+logger.info("Starting Api source monitoring jobs");
+for (const source of (config.sources).filter((source) => source.type == "cache-layer")) {
   logger.info("Starting a new source checker job with scehdule: " + source.schedule);
   schedule.scheduleJob(source.schedule, async () => {
     logger.info("Source checker iteration started");
-    await executeSourceCheckerJob(source);
+    jobApi = new JobApi();
+    await jobApi.execute(source);
+  });
+}
+
+logger.info("Starting Streamr source monitoring jobs");
+for (const source of (config.sources).filter((source) => source.type == "streamr-storage")) {
+  logger.info("Starting a new source checker job with scehdule: " + source.schedule);
+  schedule.scheduleJob(source.schedule, async () => {
+    logger.info("Source checker iteration started");
+    jobStreamr = new JobStreamr();
+    await jobStreamr.execute(source);
   });
 }
 

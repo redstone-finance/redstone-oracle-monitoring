@@ -1,86 +1,77 @@
 const axios = require("axios");
-const consola = require("consola");
 
-const redstoneApi = require("../../.secrets/redstoneApi.json");
+const consola = require("consola");
 const Notification = require("../models/notification");
+const redstoneApi = require("../../.secrets/redstoneApi.json");
 
 const REDSTONE_TIME_TRACKER_URL = redstoneApi.redstoneTimeTrackerURL;
 
-// Example configuration below
-// {
-//   url: "https://api.redstone.finance/packages/latest?provider=redstone-avalanche",
-//   schedule: "/10 * * * * *", // every 10 seconds
-//   verifySignature: true,
-//   label:  'avalanche-timestamp-delay-all',
-//   timestampDelayMillisecondsError: 3 * 60 * 1000, // 3 mins
-//   timestampDelayMillisecondsWarning: 60 * 1000, // 1 minute
-// }
 
-const logger = consola.withTag("source-checker-job");
+module.exports = class SourceCheckerJob {
+    #logger;
 
-async function execute(configuration) {
-  let comment, level, type, timestampDiff;
+    #comment;
+    #level;
+    #type;
+    #timestampDiff;
+    #url;
 
-  const currentTimestamp = Date.now();
+    #currentTimestamp;
 
-  try {
-    const response = await axios.get(configuration.url);
-
-    if (!response.data) {
-      level = "ERROR";
-      comment = "Empty response";
-      type = "fetching-failed";
-    } else {
-      if (configuration.verifySignature) {
-        // TODO: implement EVM lite signature verification here
-      }
-
-      // Check timestamp diff
-      timestampDiff = currentTimestamp - response.data.timestamp;
-
-      if (timestampDiff > configuration.timestampDelayMillisecondsError) {
-        level = "ERROR";
-        type = "timestamp-diff";
-      } else if (timestampDiff > configuration.timestampDelayMillisecondsWarning) {
-        level = "WARNING";
-        type = "timestamp-diff";
-      }
-
-      // Posting time diff to AWS cloudwatch
-      await axios.post(REDSTONE_TIME_TRACKER_URL, {
-        label: configuration.label,
-        value: timestampDiff,
-      });
+    constructor() {
+        this.logger = consola.withTag("source-checker-job");
     }
-  } catch (e) {
-    level = "ERROR";
-    type = "fetching-failed";
-    if (e.response) {
-      comment = JSON.stringify(e.response.data) + " | " + e.stack;
-    } else if (e.toJSON) {
-      comment = JSON.stringify(e.toJSON());
-    } else {
-      comment = String(e);
-    }
-    logger.error("Error occured: " + comment);
-  }
 
-  // Saving notifiaction to DB if needed
-  if (level) {
-    const notificationDetails = {
-      timestamp: currentTimestamp,
-      type,
-      level,
-      url: configuration.url,
-      comment,
-      timestampDiffMilliseconds: timestampDiff,
-    };
-    logger.info("Saving new notification to DB");
-    await new Notification(notificationDetails).save();
-    logger.info("Saved :)");
-  }
+    async execute(configuration) {
+        this.currentTimestamp = Date.now();
+        this.level = this.comment = this.type = this.timestampDiff = this.url = undefined;
+
+    }
+
+    async verification(configuration, responseData) {
+        if (!responseData.data) {
+            this.level = "ERROR";
+            this.comment = "Empty response";
+            this.type = "fetching-failed";
+        } else {
+            if (configuration.verifySignature) {
+                // TODO: implement EVM lite signature verification here
+            }
+            // Check timestamp diff
+            this.timestampDiff = this.currentTimestamp - responseData.timestamp;
+
+            if (this.timestampDiff > configuration.timestampDelayMillisecondsError) {
+                this.level = "ERROR";
+                this.type = "timestamp-diff";
+            } else if (this.timestampDiff > configuration.timestampDelayMillisecondsWarning) {
+                this.level = "WARNING";
+                this.type = "timestamp-diff";
+            }
+
+            // Posting time diff to AWS cloudwatch
+            await axios.post(REDSTONE_TIME_TRACKER_URL, {
+                label: configuration.label,
+                value: this.timestampDiff,
+            });
+        }
+
+        if (this.level) {
+            this.saveNotification();
+        }
+    }
+
+    // Saving notifiaction to DB
+    async saveNotification() {
+        const notificationDetails = {
+            timestamp: this.currentTimestamp,
+            type: this.type,
+            level: this.level,
+            url: this.url,
+            comment: this.comment,
+            timestampDiffMilliseconds: this.timestampDiff,
+        };
+        this.logger.info("Saving new notification to DB");
+        await new Notification(notificationDetails).save();
+        this.logger.info("Saved :)");
+    }
 }
-
-module.exports = {
-  execute,
-};

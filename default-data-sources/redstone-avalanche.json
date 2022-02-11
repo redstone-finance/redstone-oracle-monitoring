@@ -1,0 +1,139 @@
+{
+    "sources": [
+        {
+            "type": "streamr",
+            "streamrEndpointPrefix": "0x3a7d971de367fe15d164cdd952f64205f2d9f10c/redstone-oracle",
+            "schedule": "*/10 * * * * *",
+            "verifySignature": true,
+            "label": "avalanche-timestamp-delay-lite-1-all",
+            "timestampDelayMillisecondsError": 120000,
+            "timestampDelayMillisecondsWarning": 20000
+        },
+        {
+            "type": "streamr-storage",
+            "streamrEndpointPrefix": "0x3a7d971de367fe15d164cdd952f64205f2d9f10c/redstone-oracle",
+            "schedule": "*/10 * * * * *",
+            "verifySignature": true,
+            "label": "avalanche-timestamp-delay-lite-1-all",
+            "timestampDelayMillisecondsError": 120000,
+            "timestampDelayMillisecondsWarning": 20000
+        },
+        {
+            "type": "cache-layer",
+            "url": "https://api.redstone.finance/packages/latest?provider=f1Ipos2fVPbxPVO65GBygkMyW0tkAhp2hdprRPPBBN8",
+            "schedule": "*/10 * * * * *",
+            "verifySignature": true,
+            "label": "avalanche-timestamp-delay-full-1-all",
+            "timestampDelayMillisecondsError": 120000,
+            "timestampDelayMillisecondsWarning": 20000
+        },
+        {
+            "type": "cache-layer",
+            "url": "https://vwx3eni8c7.eu-west-1.awsapprunner.com/packages/latest?provider=f1Ipos2fVPbxPVO65GBygkMyW0tkAhp2hdprRPPBBN8",
+            "schedule": "*/10 * * * * *",
+            "verifySignature": true,
+            "label": "avalanche-timestamp-delay-lite-1-all",
+            "timestampDelayMillisecondsError": 120000,
+            "timestampDelayMillisecondsWarning": 20000
+        },
+        {
+            "type": "cache-layer",
+            "url": "https://container-service-1.dv9sai71f4rsq.eu-central-1.cs.amazonlightsail.com/packages/latest?provider=f1Ipos2fVPbxPVO65GBygkMyW0tkAhp2hdprRPPBBN8",
+            "schedule": "*/10 * * * * *",
+            "verifySignature": true,
+            "label": "avalanche-timestamp-delay-lite-2-all",
+            "timestampDelayMillisecondsError": 120000,
+            "timestampDelayMillisecondsWarning": 20000
+        },
+        {
+            "type": "cache-layer",
+            "url": "https://api.redstone.finance/packages/latest?provider=f1Ipos2fVPbxPVO65GBygkMyW0tkAhp2hdprRPPBBN8&symbol=ETH",
+            "schedule": "*/10 * * * * *",
+            "verifySignature": true,
+            "label": "avalanche-timestamp-delay-full-1-ETH",
+            "timestampDelayMillisecondsError": 120000,
+            "timestampDelayMillisecondsWarning": 20000
+        },
+        {
+            "type": "cache-layer",
+            "url": "https://api.redstone.finance/packages/latest?provider=f1Ipos2fVPbxPVO65GBygkMyW0tkAhp2hdprRPPBBN8&symbol=AVAX",
+            "schedule": "*/10 * * * * *",
+            "verifySignature": true,
+            "label": "avalanche-timestamp-delay-full-1-AVAX",
+            "timestampDelayMillisecondsError": 120000,
+            "timestampDelayMillisecondsWarning": 20000
+        },
+        {
+            "type": "cache-layer",
+            "url": "https://api.redstone.finance/packages/latest?provider=f1Ipos2fVPbxPVO65GBygkMyW0tkAhp2hdprRPPBBN8&symbol=QI",
+            "schedule": "*/10 * * * * *",
+            "verifySignature": true,
+            "label": "avalanche-timestamp-delay-full-1-QI",
+            "timestampDelayMillisecondsError": 120000,
+            "timestampDelayMillisecondsWarning": 20000
+        },
+        {
+            "type": "cache-layer",
+            "url": "https://vwx3eni8c7.eu-west-1.awsapprunner.com/packages/latest?provider=f1Ipos2fVPbxPVO65GBygkMyW0tkAhp2hdprRPPBBN8&symbol=ETH",
+            "schedule": "*/10 * * * * *",
+            "verifySignature": true,
+            "label": "avalanche-timestamp-delay-full-1-ETH",
+            "timestampDelayMillisecondsError": 120000,
+            "timestampDelayMillisecondsWarning": 20000
+        },
+        {
+            "type": "cache-layer",
+            "url": "https://vwx3eni8c7.eu-west-1.awsapprunner.com/packages/latest?provider=f1Ipos2fVPbxPVO65GBygkMyW0tkAhp2hdprRPPBBN8&symbol=AVAX",
+            "schedule": "*/10 * * * * *",
+            "verifySignature": true,
+            "label": "avalanche-timestamp-delay-full-1-AVAX",
+            "timestampDelayMillisecondsError": 120000,
+            "timestampDelayMillisecondsWarning": 20000
+        },
+        {
+            "type": "cache-layer",
+            "url": "https://vwx3eni8c7.eu-west-1.awsapprunner.com/packages/latest?provider=f1Ipos2fVPbxPVO65GBygkMyW0tkAhp2hdprRPPBBN8&symbol=QI",
+            "schedule": "*/10 * * * * *",
+            "verifySignature": true,
+            "label": "avalanche-timestamp-delay-full-1-QI",
+            "timestampDelayMillisecondsError": 120000,
+            "timestampDelayMillisecondsWarning": 20000
+        },
+        {
+            "type": "cache-layer",
+            "url": "https://container-service-1.dv9sai71f4rsq.eu-central-1.cs.amazonlightsail.com/packages/latest?provider=f1Ipos2fVPbxPVO65GBygkMyW0tkAhp2hdprRPPBBN8&symbol=ETH",
+            "schedule": "*/10 * * * * *",
+            "verifySignature": true,
+            "label": "avalanche-timestamp-delay-full-1-ETH",
+            "timestampDelayMillisecondsError": 120000,
+            "timestampDelayMillisecondsWarning": 20000
+        },
+        {
+            "type": "cache-layer",
+            "url": "https://container-service-1.dv9sai71f4rsq.eu-central-1.cs.amazonlightsail.com/packages/latest?provider=f1Ipos2fVPbxPVO65GBygkMyW0tkAhp2hdprRPPBBN8&symbol=AVAX",
+            "schedule": "*/10 * * * * *",
+            "verifySignature": true,
+            "label": "avalanche-timestamp-delay-full-1-AVAX",
+            "timestampDelayMillisecondsError": 120000,
+            "timestampDelayMillisecondsWarning": 20000
+        },
+        {
+            "type": "cache-layer",
+            "url": "https://container-service-1.dv9sai71f4rsq.eu-central-1.cs.amazonlightsail.com/packages/latest?provider=f1Ipos2fVPbxPVO65GBygkMyW0tkAhp2hdprRPPBBN8&symbol=QI",
+            "schedule": "*/10 * * * * *",
+            "verifySignature": true,
+            "label": "avalanche-timestamp-delay-full-1-QI",
+            "timestampDelayMillisecondsError": 120000,
+            "timestampDelayMillisecondsWarning": 20000
+        }
+    ],
+    "notifiers": {
+        "AWS-SNS": {
+            "interval": 300000,
+            "levels": [
+                "WARNING",
+                "ERROR"
+            ]
+        }
+    }
+}

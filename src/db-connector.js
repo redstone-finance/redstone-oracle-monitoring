@@ -1,18 +1,12 @@
 const mongoose = require("mongoose");
-const mongodbInfo = require("../.secrets/mongodb.json");
+const mongodbInfo = require("../.secrets/local_mongodb.json");
 
-const url = "mongodb+srv://" + mongodbInfo.login +
-  ":" + mongodbInfo.password +
-  "@" + mongodbInfo.host1 +
-  "/" + mongodbInfo.defaultauthdb +
-  "?" + mongodbInfo.options;
+const url = mongodbInfo.fullPath;
 
 async function connectToRemoteMongo() {
   await mongoose.connect(url, {
     useNewUrlParser: true,
     useUnifiedTopology: true,
-    // useFindAndModify: false,
-    // useCreateIndex: true,
   }).then("Connected to mongoDB");
 }
 
