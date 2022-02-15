@@ -22,10 +22,33 @@ module.exports = class SourceCheckerJob {
         this.logger = consola.withTag("source-checker-job");
     }
 
+    async connection(configuration) { }
+
     async execute(configuration) {
         this.currentTimestamp = Date.now();
         this.level = this.comment = this.type = this.timestampDiff = this.url = undefined;
 
+        try {
+            let responseData = await this.connection(configuration);
+            this.verification(configuration, responseData);
+        }
+        catch (e) {
+            this.level = "ERROR";
+            this.type = "fetching-failed";
+            if (e.response) {
+                this.comment = JSON.stringify(e.response) + " | " + e.stack;
+            } else if (e.toJSON) {
+                this.comment = JSON.stringify(e.toJSON());
+            } else {
+                this.comment = String(e);
+            }
+            this.logger.error("Error occured: " + this.comment);
+        }
+        finally {
+            if (this.level) {
+                this.saveNotification();
+            }
+        }
     }
 
     async verification(configuration, responseData) {
@@ -53,10 +76,6 @@ module.exports = class SourceCheckerJob {
                 label: configuration.label,
                 value: this.timestampDiff,
             });
-        }
-
-        if (this.level) {
-            this.saveNotification();
         }
     }
 

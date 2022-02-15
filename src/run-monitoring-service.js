@@ -3,8 +3,8 @@ const consola = require("consola");
 const config = require("../default-data-sources/redstone-avalanche.json");      //require("./monitoring-service-configuration");
 const { connectToRemoteMongo } = require("./db-connector");
 const { execute: executeEmailNotifierJob } = require("./notifiers/email-notifier-job");
-const JobApi = require("./source-monitoring/source-checker-job-Api");
-const JobStreamr = require("./source-monitoring/source-checker-job-Streamr");
+const JobApi = require("./source-monitoring/api-source-checker-job");
+const JobStreamr = require("./source-monitoring/streamr-checker-job");
 const EVERY_10_SECONDS = "*/10 * * * * *";
 
 connectToRemoteMongo();

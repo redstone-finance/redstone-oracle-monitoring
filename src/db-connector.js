@@ -1,7 +1,7 @@
 const mongoose = require("mongoose");
-const mongodbInfo = require("../.secrets/local_mongodb.json");
+const mongodbInfo = require("../.secrets/mongodb.json");
 
-const url = mongodbInfo.fullPath;
+const url = mongodbInfo.connectionString;
 
 async function connectToRemoteMongo() {
   await mongoose.connect(url, {

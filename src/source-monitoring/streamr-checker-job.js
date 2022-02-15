@@ -25,36 +25,22 @@ module.exports = class SourceCheckerJobStreamr extends SourceCheckerJob {
         })
     }
 
-    async execute(configuration) {
-        super.execute(configuration);
+    async connection(configuration) {
+        this.url = configuration.streamrEndpointPrefix + '/package';
 
-        try {
-            this.url = configuration.streamrEndpointPrefix + '/package';
-            const sub = await this.client.resend({
+        return new Promise((resolve, reject) => {
+            this.client.resend({
                 stream: this.url,
                 resend: {
                     last: 1,
                 },
             }, (response) => {
-                super.verification(configuration, {
+                resolve({
                     data: response,
                     timestamp: response.pricePackage.timestamp
                 });
             });
-        }
-        catch (e) {
-            this.level = "ERROR";
-            this.type = "fetching-failed";
-            if (e.response) {
-                this.comment = JSON.stringify(e.response) + " | " + e.stack;
-            } else if (e.toJSON) {
-                this.comment = JSON.stringify(e.toJSON());
-            } else {
-                this.comment = String(e);
-            }
-            this.logger.error("Error occured: " + this.comment);
+        });
 
-            super.saveNotification();
-        }
     }
 }
