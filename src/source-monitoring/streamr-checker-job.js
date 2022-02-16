@@ -25,20 +25,21 @@ module.exports = class SourceCheckerJobStreamr extends SourceCheckerJob {
         })
     }
 
-    async connection(configuration) {
-        this.url = configuration.streamrEndpointPrefix + '/package';
+    async connection(configuration, responseInfo) {
+        let url = configuration.streamrEndpointPrefix + '/package';
 
         return new Promise((resolve, reject) => {
             this.client.resend({
-                stream: this.url,
+                stream: url,
                 resend: {
                     last: 1,
                 },
             }, (response) => {
-                resolve({
-                    data: response,
-                    timestamp: response.pricePackage.timestamp
-                });
+                responseInfo.url = url;
+                responseInfo.data = response;
+                responseInfo.timestamp = response.pricePackage.timestamp;
+
+                resolve();
             });
         });
 

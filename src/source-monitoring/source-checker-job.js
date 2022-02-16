@@ -8,86 +8,87 @@ const REDSTONE_TIME_TRACKER_URL = redstoneApi.redstoneTimeTrackerURL;
 
 
 module.exports = class SourceCheckerJob {
-    #logger;
-
-    #comment;
-    #level;
-    #type;
-    #timestampDiff;
-    #url;
-
-    #currentTimestamp;
+    logger;
 
     constructor() {
         this.logger = consola.withTag("source-checker-job");
     }
 
-    async connection(configuration) { }
+    async connection(configuration, responseInfo) { }
 
     async execute(configuration) {
-        this.currentTimestamp = Date.now();
-        this.level = this.comment = this.type = this.timestampDiff = this.url = undefined;
+        let responseInfo = {
+            level: undefined,
+            comment: undefined,
+            type: undefined,
+            timestampDiff: undefined,
+            timestamp: undefined,
+            currentTimestamp: Date.now(),
+            responseData: undefined,
+            url: undefined,
+            data: undefined
+        };
 
         try {
-            let responseData = await this.connection(configuration);
-            this.verification(configuration, responseData);
+            await this.connection(configuration, responseInfo);
+            this.verification(configuration, responseInfo);
         }
         catch (e) {
-            this.level = "ERROR";
-            this.type = "fetching-failed";
+            responseInfo.level = "ERROR";
+            responseInfo.type = "fetching-failed";
             if (e.response) {
-                this.comment = JSON.stringify(e.response) + " | " + e.stack;
+                responseInfo.comment = JSON.stringify(e.response) + " | " + e.stack;
             } else if (e.toJSON) {
-                this.comment = JSON.stringify(e.toJSON());
+                responseInfo.comment = JSON.stringify(e.toJSON());
             } else {
-                this.comment = String(e);
+                responseInfo.comment = String(e);
             }
-            this.logger.error("Error occured: " + this.comment);
+            this.logger.error("Error occured: " + responseInfo.comment);
         }
         finally {
-            if (this.level) {
-                this.saveNotification();
+            if (responseInfo.level) {
+                this.saveNotification(responseInfo);
             }
         }
     }
 
-    async verification(configuration, responseData) {
-        if (!responseData.data) {
-            this.level = "ERROR";
-            this.comment = "Empty response";
-            this.type = "fetching-failed";
+    async verification(configuration, responseInfo) {
+        if (!responseInfo.data) {
+            responseInfo.level = "ERROR";
+            responseInfo.comment = "Empty response";
+            responseInfo.type = "fetching-failed";
         } else {
             if (configuration.verifySignature) {
                 // TODO: implement EVM lite signature verification here
             }
             // Check timestamp diff
-            this.timestampDiff = this.currentTimestamp - responseData.timestamp;
+            responseInfo.timestampDiff = responseInfo.currentTimestamp - responseInfo.timestamp;
 
-            if (this.timestampDiff > configuration.timestampDelayMillisecondsError) {
-                this.level = "ERROR";
-                this.type = "timestamp-diff";
+            if (responseInfo.timestampDiff > configuration.timestampDelayMillisecondsError) {
+                responseInfo.level = "ERROR";
+                responseInfo.type = "timestamp-diff";
             } else if (this.timestampDiff > configuration.timestampDelayMillisecondsWarning) {
-                this.level = "WARNING";
-                this.type = "timestamp-diff";
+                responseInfo.level = "WARNING";
+                responseInfo.type = "timestamp-diff";
             }
 
             // Posting time diff to AWS cloudwatch
             await axios.post(REDSTONE_TIME_TRACKER_URL, {
                 label: configuration.label,
-                value: this.timestampDiff,
+                value: responseInfo.timestampDiff,
             });
         }
     }
 
     // Saving notifiaction to DB
-    async saveNotification() {
+    async saveNotification(responseInfo) {
         const notificationDetails = {
-            timestamp: this.currentTimestamp,
-            type: this.type,
-            level: this.level,
-            url: this.url,
-            comment: this.comment,
-            timestampDiffMilliseconds: this.timestampDiff,
+            timestamp: responseInfo.currentTimestamp,
+            type: responseInfo.type,
+            level: responseInfo.level,
+            url: responseInfo.url,
+            comment: responseInfo.comment,
+            timestampDiffMilliseconds: responseInfo.timestampDiff,
         };
         this.logger.info("Saving new notification to DB");
         await new Notification(notificationDetails).save();

@@ -18,17 +18,15 @@ module.exports = class SourceCheckerJobApi extends SourceCheckerJob {
         super();
     }
 
-    async connection(configuration) {
-        let responseData;
-
-        super.url = configuration.url;
-        const response = await axios.get(this.url);
+    async connection(configuration, responseInfo) {
+        const response = await axios.get(configuration.url);
 
         return new Promise((resolve, reject) => {
-            resolve({
-                data: response.data,
-                timestamp: response.data.timestamp
-            });
+            responseInfo.url = configuration.url;
+            responseInfo.data = response.data;
+            responseInfo.timestamp = response.data.timestamp;
+
+            resolve();
         });
     }
 }
