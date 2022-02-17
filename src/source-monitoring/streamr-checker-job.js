@@ -25,7 +25,7 @@ module.exports = class SourceCheckerJobStreamr extends SourceCheckerJob {
         })
     }
 
-    async connection(configuration, responseInfo) {
+    async request(configuration, responseInfo) {
         let url = configuration.streamrEndpointPrefix + '/package';
 
         return new Promise((resolve, reject) => {
@@ -39,9 +39,8 @@ module.exports = class SourceCheckerJobStreamr extends SourceCheckerJob {
                 responseInfo.data = response;
                 responseInfo.timestamp = response.pricePackage.timestamp;
 
-                resolve();
+                resolve(responseInfo);
             });
         });
-
     }
 }

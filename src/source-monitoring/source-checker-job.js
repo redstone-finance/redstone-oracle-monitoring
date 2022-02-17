@@ -14,8 +14,6 @@ module.exports = class SourceCheckerJob {
         this.logger = consola.withTag("source-checker-job");
     }
 
-    async connection(configuration, responseInfo) { }
-
     async execute(configuration) {
         let responseInfo = {
             level: undefined,
@@ -30,8 +28,8 @@ module.exports = class SourceCheckerJob {
         };
 
         try {
-            await this.connection(configuration, responseInfo);
-            this.verification(configuration, responseInfo);
+            responseInfo = await this.request(configuration, responseInfo);
+            responseInfo = await this.verification(configuration, responseInfo);
         }
         catch (e) {
             responseInfo.level = "ERROR";
@@ -52,7 +50,9 @@ module.exports = class SourceCheckerJob {
         }
     }
 
-    async verification(configuration, responseInfo) {
+    async request(configuration, responseInfo) { }
+
+    async verification(configuration, responseInfo) {               //verified
         if (!responseInfo.data) {
             responseInfo.level = "ERROR";
             responseInfo.comment = "Empty response";
@@ -67,7 +67,7 @@ module.exports = class SourceCheckerJob {
             if (responseInfo.timestampDiff > configuration.timestampDelayMillisecondsError) {
                 responseInfo.level = "ERROR";
                 responseInfo.type = "timestamp-diff";
-            } else if (this.timestampDiff > configuration.timestampDelayMillisecondsWarning) {
+            } else if (responseInfo.timestampDiff > configuration.timestampDelayMillisecondsWarning) {
                 responseInfo.level = "WARNING";
                 responseInfo.type = "timestamp-diff";
             }
@@ -77,11 +77,13 @@ module.exports = class SourceCheckerJob {
                 label: configuration.label,
                 value: responseInfo.timestampDiff,
             });
+
         }
+        return (responseInfo);
     }
 
     // Saving notifiaction to DB
-    async saveNotification(responseInfo) {
+    async notificationSaving(responseInfo) {
         const notificationDetails = {
             timestamp: responseInfo.currentTimestamp,
             type: responseInfo.type,
