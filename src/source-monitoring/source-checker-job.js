@@ -1,5 +1,4 @@
 const axios = require("axios");
-
 const consola = require("consola");
 const Notification = require("../models/notification");
 const redstoneApi = require("../../.secrets/redstoneApi.json");

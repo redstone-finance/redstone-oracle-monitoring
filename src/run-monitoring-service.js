@@ -1,6 +1,6 @@
 const schedule = require("node-schedule");
 const consola = require("consola");
-const config = require("../default-data-sources/redstone-avalanche.json");      //require("./monitoring-service-configuration");
+const config = require("../default-data-sources/redstone-avalanche.json");
 const { connectToRemoteMongo } = require("./db-connector");
 const { execute: executeEmailNotifierJob } = require("./notifiers/email-notifier-job");
 const JobApi = require("./source-monitoring/api-source-checker-job");

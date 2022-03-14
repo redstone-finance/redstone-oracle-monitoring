@@ -1,6 +1,6 @@
 {
   "scripts": {
-    "start": "Node ./src/run-monitoring-service.js",
+    "start": "node ./src/run-monitoring-service.js",
     "prepare": "yarn build"
   },
   "dependencies": {
