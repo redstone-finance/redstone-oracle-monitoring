@@ -33,6 +33,7 @@ function avalancheSourceChecker(baseUrl, symbol, labelPostfix) {
   const url = `${baseUrl}/packages/latest?provider=f1Ipos2fVPbxPVO65GBygkMyW0tkAhp2hdprRPPBBN8`
     + (symbol ? `&symbol=${symbol}` : '');
   return {
+    type: "cache-layer",
     url,
     schedule: "*/10 * * * * *", // every 10 seconds
     verifySignature: true,
@@ -42,4 +43,5 @@ function avalancheSourceChecker(baseUrl, symbol, labelPostfix) {
   };
 }
 
-module.exports = config;
+console.log(JSON.stringify(config, null, 2));
+
