@@ -4,6 +4,8 @@ RedStone Oracle Monitoring is an application used to periodically download and v
 - [Running](#running)
 - [Configuration](#configuration)
     - [Data sources](#Data-Sources)
+- [Tools](#Tools)
+
 ## Installation
 `yarn`
 or
@@ -19,7 +21,7 @@ or
 ### Data Sources
 Configuration of source types, addresses, schedules takes place in the file  [`default-data-sources/redstone-avalanche.json`](default-data-sources/redstone-avalanche.json).
 We currently use two sources of information: [RedStone-Api](https://redstone.finance/#api) and [Streamr](https://streamr.network/docs/streamr-network/using-a-light-node), which can be clearly seen in the example below:
-```
+```json
         {
             "type": "streamr",
             "streamrEndpointPrefix": "0x3a7d971de367fe15d164cdd952f64205f2d9f10c/redstone-oracle",
@@ -29,8 +31,6 @@ We currently use two sources of information: [RedStone-Api](https://redstone.fin
             "timestampDelayMillisecondsError": 120000,
             "timestampDelayMillisecondsWarning": 20000
         },
-```
-```
         {
             "type": "cache-layer",
             "url": "https://api.redstone.finance/packages/latest?provider=f1Ipos2fVPbxPVO65GBygkMyW0tkAhp2hdprRPPBBN8&symbol=ETH",
@@ -49,3 +49,8 @@ The others lines are the same for both types of sources:
 - `"label"` - label identifying the source that will be written to the database when an error is detected
 - `"timestampDelayMillisecondsError"` - maximum allowable data obsolescence (written **error** to the database)
 - `"timestampDelayMillisecondsWarning"` - as above (written **warning** to the database)
+
+
+## Tools
+In folder [`./src/tools`](src/tools) are defined some interesting programs and scripts:
+- [`monitoring-service-configuration.js`](#src/tools/monitoring-service-configuration.js) - script for generating a sample sources file
