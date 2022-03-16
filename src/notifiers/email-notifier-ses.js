@@ -1,8 +1,7 @@
 var AWS = require('aws-sdk');
-const SES = require("../../.secrets/aws-ses.json");
+const { SES } = require("../config");
 
-const path = require('path')
-const dirPath = path.join(__dirname, '../../.secrets/aws-config.json')
+const { dirPath } = require("../config");
 AWS.config.loadFromPath(dirPath);
 
 

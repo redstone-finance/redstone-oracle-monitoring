@@ -1,6 +1,6 @@
 const mailgun = require("mailgun-js");
 
-const mailInfo = require("../../.secrets/mail.json");
+const { mailInfo } = require("../config");
 
 const DEV_EMAIL = mailInfo.devEmail;
 const SENDER_EMAIL = mailInfo.senderEmail; // It is verified in sendgrid 

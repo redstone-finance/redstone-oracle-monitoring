@@ -1,7 +1,7 @@
 const axios = require("axios");
 const consola = require("consola");
 const Notification = require("../models/notification");
-const redstoneApi = require("../../.secrets/redstoneApi.json");
+const { redstoneApi } = require("../config");
 
 const REDSTONE_TIME_TRACKER_URL = redstoneApi.redstoneTimeTrackerURL;
 

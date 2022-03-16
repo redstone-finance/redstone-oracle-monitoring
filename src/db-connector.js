@@ -1,5 +1,5 @@
 const mongoose = require("mongoose");
-const mongodbInfo = require("../.secrets/local_mongodb.json");
+const { mongodbInfo } = require("./config");
 
 const url = mongodbInfo.connectionString;
 

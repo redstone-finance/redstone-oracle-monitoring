@@ -1,6 +1,6 @@
 const consola = require("consola");
 
-const mongodbInfo = require("../../.secrets/mongodb.json");
+const { mongodbInfo } = require("../config");
 const Notification = require("../models/notification");
 const Mail = require("../models/mail");
 const { notify } = require("./email-notifier-ses.js");
