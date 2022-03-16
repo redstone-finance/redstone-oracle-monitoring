@@ -7,12 +7,14 @@ const NotificationSchema = new Schema({
     required: true,
   },
   type: {
-    type: String, // enum: ["timestamp-diff", "invalid-signature", "fetching-failed"]
+    type: String,
     required: true,
+    enum: ["timestamp-diff", "invalid-signature", "fetching-failed"]
   },
   level: {
-    type: String, // enum: ["ERROR", "WARNING"]
+    type: String,
     required: true,
+    enum: ["ERROR", "WARNING"]
   },
   url: {
     type: String,

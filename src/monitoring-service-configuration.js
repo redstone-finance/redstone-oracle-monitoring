@@ -1,4 +1,4 @@
-const API_URLS = {  // poczytać
+const API_URLS = {
   "full-1": "https://api.redstone.finance",
   "lite-1": "https://vwx3eni8c7.eu-west-1.awsapprunner.com",
   "lite-2": "https://container-service-1.dv9sai71f4rsq.eu-central-1.cs.amazonlightsail.com"
