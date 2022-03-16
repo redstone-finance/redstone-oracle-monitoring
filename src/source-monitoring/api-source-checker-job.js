@@ -1,6 +1,6 @@
 const axios = require("axios");
 
-const SourceCheckerJob = require("./source-checker-job.js");
+const SourceCheckerJob = require("./CheckerJob.js");
 
 // Example configuration below
 // {
@@ -18,13 +18,13 @@ module.exports = class SourceCheckerJobApi extends SourceCheckerJob {
         super();
     }
 
-    async request(configuration, responseInfo) {
+    async request(configuration) {
         const response = await axios.get(configuration.url);
 
         return ({
-            responseInfo.url = configuration.url;
-            responseInfo.data = response.data;
-            responseInfo.timestamp = response.data.timestamp;
-        })
+            url: configuration.url,
+            data: response.data,
+            timestamp: response.data.timestamp,
+        });
     }
 }

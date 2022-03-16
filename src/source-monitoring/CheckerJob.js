@@ -15,20 +15,15 @@ module.exports = class SourceCheckerJob {
 
     async execute(configuration) {
         let responseInfo = {
-            level: undefined,
-            comment: undefined,
-            type: undefined,
-            timestampDiff: undefined,
-            timestamp: undefined,
             currentTimestamp: Date.now(),
-            responseData: undefined,
-            url: undefined,
-            data: undefined
         };
 
         try {
-            responseInfo = await this.request(configuration, responseInfo);
-            responseInfo = await this.verification(configuration, responseInfo);
+            let info = await this.request(configuration);
+            responseInfo = Object.assign({}, responseInfo, info);
+
+            let errorInfo = await this.verification(configuration, responseInfo);
+            responseInfo = Object.assign({}, responseInfo, errorInfo);
         }
         catch (e) {
             responseInfo.level = "ERROR";
@@ -44,12 +39,12 @@ module.exports = class SourceCheckerJob {
         }
         finally {
             if (responseInfo.level) {
-                this.saveNotification(responseInfo);
+                this.notificationSaving(responseInfo);
             }
         }
     }
 
-    async request(configuration, responseInfo) { }
+    async request(configuration) { }
 
     async verification(configuration, responseInfo) {               //verified
         if (!responseInfo.data) {

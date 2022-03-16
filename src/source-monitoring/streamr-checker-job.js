@@ -1,6 +1,6 @@
 const StreamrClient = require('streamr-client');
 
-const SourceCheckerJob = require("./source-checker-job.js")
+const SourceCheckerJob = require("./CheckerJob.js")
 
 
 // Example configuration below
@@ -13,6 +13,7 @@ const SourceCheckerJob = require("./source-checker-job.js")
 //    "timestampDelayMillisecondsError": 120000,
 //    "timestampDelayMillisecondsWarning": 20000
 // }
+
 module.exports = class SourceCheckerJobStreamr extends SourceCheckerJob {
 
     constructor() {
@@ -25,7 +26,7 @@ module.exports = class SourceCheckerJobStreamr extends SourceCheckerJob {
         })
     }
 
-    async request(configuration, responseInfo) {
+    async request(configuration) {
         let url = configuration.streamrEndpointPrefix + '/package';
 
         return new Promise((resolve, reject) => {
@@ -35,11 +36,12 @@ module.exports = class SourceCheckerJobStreamr extends SourceCheckerJob {
                     last: 1,
                 },
             }, (response) => {
-                responseInfo.url = url;
-                responseInfo.data = response;
-                responseInfo.timestamp = response.pricePackage.timestamp;
 
-                resolve(responseInfo);
+                resolve({
+                    url: configuration.url,
+                    data: response.data,
+                    timestamp: response.data.timestamp,
+                });
             });
         });
     }
