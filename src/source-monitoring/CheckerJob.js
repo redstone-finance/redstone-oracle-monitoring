@@ -1,5 +1,7 @@
 const axios = require("axios");
 const consola = require("consola");
+const redstone = require("redstone-api-extended");
+
 const Notification = require("../models/notification");
 const { redstoneApi } = require("../config");
 
@@ -16,10 +18,12 @@ module.exports = class SourceCheckerJob {
     async execute(configuration) {
         let responseInfo = {
             currentTimestamp: Date.now(),
+            url: configuration.url,
+            streamrEndpointPrefix: configuration.streamrEndpointPrefix,
         };
 
         try {
-            let info = await this.request(configuration);
+            let info = await this.getData(configuration);
             responseInfo = Object.assign({}, responseInfo, info);
 
             let errorInfo = await this.verification(configuration, responseInfo);
@@ -44,19 +48,26 @@ module.exports = class SourceCheckerJob {
         }
     }
 
-    async request(configuration) { }
+    convertConfigData(configuration) { }
+
+    async getData(configuration) {
+        let DataSourceConfig = this.convertConfigData(configuration);
+        const dataPackage = await redstone.oracle.get(DataSourceConfig);
+        return (dataPackage);
+    }
 
     async verification(configuration, responseInfo) {               //verified
-        if (!responseInfo.data) {
+        if (!responseInfo.priceData) {
             responseInfo.level = "ERROR";
             responseInfo.comment = "Empty response";
             responseInfo.type = "fetching-failed";
         } else {
-            if (configuration.verifySignature) {
+            if (configuration.signature) {
                 // TODO: implement EVM lite signature verification here
             }
             // Check timestamp diff
-            responseInfo.timestampDiff = responseInfo.currentTimestamp - responseInfo.timestamp;
+
+            responseInfo.timestampDiff = responseInfo.currentTimestamp - responseInfo.priceData.timestamp;
 
             if (responseInfo.timestampDiff > configuration.timestampDelayMillisecondsError) {
                 responseInfo.level = "ERROR";

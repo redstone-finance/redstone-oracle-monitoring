@@ -16,33 +16,21 @@ const SourceCheckerJob = require("./CheckerJob.js")
 
 module.exports = class SourceCheckerJobStreamr extends SourceCheckerJob {
 
-    constructor() {
-        super();
-
-        this.client = new StreamrClient({
-            auth: {
-                privateKey: StreamrClient.generateEthereumAccount().privateKey,
-            }
-        })
-    }
-
-    async request(configuration) {
-        let url = configuration.streamrEndpointPrefix + '/package';
-
-        return new Promise((resolve, reject) => {
-            this.client.resend({
-                stream: url,
-                resend: {
-                    last: 1,
-                },
-            }, (response) => {
-
-                resolve({
-                    url: configuration.url,
-                    data: response.data,
-                    timestamp: response.data.timestamp,
-                });
+    convertConfigData(configuration) {
+        return (
+            {
+                "sources": [
+                    {
+                        "type": configuration.type,
+                        "streamrEndpointPrefix": configuration.streamrEndpointPrefix,
+                        "disabledForSinglePrices": false,
+                        "evmSignerAddress": ""
+                    }
+                ],
+                "valueSelectionAlgorithm": "first-valid",
+                "timeoutMilliseconds": 10000,
+                "maxTimestampDiffMilliseconds": configuration.timestampDelayMillisecondsError,
+                "preVerifySignatureOffchain": false
             });
-        });
     }
 }

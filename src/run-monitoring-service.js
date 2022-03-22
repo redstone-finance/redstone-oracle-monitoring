@@ -25,6 +25,7 @@ for (const source of config.sources) {
     logger.info("Source checker iteration started");
 
     switch (source.type) {
+      case "streamr":
       case "streamr-storage":
         StreamrChecker = new StreamrCheckerJob();
         await StreamrChecker.execute(source);

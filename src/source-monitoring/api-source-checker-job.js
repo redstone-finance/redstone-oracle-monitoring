@@ -1,4 +1,5 @@
 const axios = require("axios");
+const { URL } = require('url');
 
 const SourceCheckerJob = require("./CheckerJob.js");
 
@@ -14,17 +15,28 @@ const SourceCheckerJob = require("./CheckerJob.js");
 
 module.exports = class SourceCheckerJobApi extends SourceCheckerJob {
 
-    constructor() {
-        super();
-    }
+    convertConfigData(configuration) {
+        // parse url
+        const urlObject = new URL(configuration.url);
 
-    async request(configuration) {
-        const response = await axios.get(configuration.url);
+        const domain_address = urlObject.protocol + "//" + urlObject.hostname;
+        const providerId = urlObject.searchParams.get('provider');
 
-        return ({
-            url: configuration.url,
-            data: response.data,
-            timestamp: response.data.timestamp,
-        });
+        // convert configuration to redston-api format
+        return (
+            {
+                "sources": [
+                    {
+                        "type": configuration.type,
+                        "url": domain_address,
+                        "providerId": providerId,
+                        "evmSignerAddress": ""
+                    }
+                ],
+                "valueSelectionAlgorithm": "first-valid",
+                "timeoutMilliseconds": 10000,
+                "maxTimestampDiffMilliseconds": configuration.timestampDelayMillisecondsError,
+                "preVerifySignatureOffchain": false
+            });
     }
 }
