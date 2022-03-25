@@ -1,7 +1,8 @@
 {
   "scripts": {
-    "build": "tsc",
+    "transpile": "tsc --project tsconfig.json",
     "start": "node ./src/run-monitoring-service.js",
+    "start:ts": "ts-node ./src/run-monitoring-service.js",
     "prepare": "yarn build"
   },
   "dependencies": {

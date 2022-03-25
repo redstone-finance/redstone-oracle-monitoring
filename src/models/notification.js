@@ -1,4 +1,6 @@
 const mongoose = require("mongoose");
+const Types = require("../types");
+
 const Schema = mongoose.Schema;
 
 const NotificationSchema = new Schema({
@@ -9,12 +11,12 @@ const NotificationSchema = new Schema({
   type: {
     type: String,
     required: true,
-    enum: ["timestamp-diff", "invalid-signature", "fetching-failed"]
+    enum: Types.ExceptionType
   },
   level: {
     type: String,
     required: true,
-    enum: ["ERROR", "WARNING"]
+    enum: Types.ExceptionLevel
   },
   url: {
     type: String,

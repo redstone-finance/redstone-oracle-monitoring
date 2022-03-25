@@ -1,39 +1,41 @@
 const schedule = require("node-schedule");
 const consola = require("consola");
-const config = require("../default-data-sources/redstone-avalanche.json");
+const redstone = require("redstone-api-extended");
+
+const config = require("./config");
 const { connectToRemoteMongo } = require("./db-connector");
 const { execute: executeEmailNotifierJob } = require("./notifiers/email-notifier-job");
-const ApiCheckerJob = require("./source-monitoring/api-source-checker-job");
-const StreamrCheckerJob = require("./source-monitoring/streamr-checker-job");
-const EVERY_10_SECONDS = "*/10 * * * * *";
+const DataFeedCheckerJob = require("./source-monitoring/DataFeedCheckerJob");
+const SingleSourceCheckerJob = require("./source-monitoring/SingleSourceCheckerJob");
 
 connectToRemoteMongo();
 const logger = consola.withTag("run-monitoring-service.js");
 
 
 logger.info("Starting the email notifier job");
-schedule.scheduleJob(EVERY_10_SECONDS, async () => {
+schedule.scheduleJob(config.checkerSchedule, async () => {
   logger.info("Email notifier iteration started");
   await executeEmailNotifierJob();
 });
 
 
 logger.info("Starting source monitoring jobs");
-for (const source of config.sources) {
-  logger.info("Starting a new source checker job with scehdule: " + source.schedule);
-  schedule.scheduleJob(source.schedule, async () => {
-    logger.info("Source checker iteration started");
+for (const dataFeedId of config.dataFeedIds) {
+  const defaultDataFeedConfig = redstone.oracle.getDefaultDataSourcesConfig(dataFeedId);
 
-    switch (source.type) {
-      case "streamr":
-      case "streamr-storage":
-        StreamrChecker = new StreamrCheckerJob();
-        await StreamrChecker.execute(source);
-        break;
-      case "cache-layer":
-        ApiChecker = new ApiCheckerJob();
-        await ApiChecker.execute(source);
-        break;
-    }
+  const job = new DataFeedCheckerJob(defaultDataFeedConfig, "ERROR", dataFeedId);
+  schedule.scheduleJob(config.checkerSchedule, async () => {
+    await job.execute();
   });
+
+  for (const source of defaultDataFeedConfig.sources) {
+    const configForSingleSource = {
+      ...defaultDataFeedConfig,
+      sources: [source],
+    };
+    const subJob = new SingleSourceCheckerJob(configForSingleSource, "WARNING");
+    schedule.scheduleJob(config.checkerSchedule, async () => {
+      await subJob.execute();
+    });
+  }
 }
