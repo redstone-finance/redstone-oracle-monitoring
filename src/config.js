@@ -6,7 +6,7 @@ const dirPath = path.join(__dirname, '../.secrets/aws-config.json')
 const mailInfo = require("../.secrets/mail.json");
 const mongodbInfo = require("../.secrets/local_mongodb.json");
 
-const dataDeedIds = [
+const dataFeedIds = [
     "redstone-avalanche-prod",
     "redstone-avalanche",
     "redstone-rapid",

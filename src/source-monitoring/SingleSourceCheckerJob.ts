@@ -1,5 +1,5 @@
 import { CheckerJob } from "./CheckerJob"
-import { ReceivedDataDetails, NotificationDetails, ExceptionType } from "../types";
+import { ReceivedDataDetails, NotificationDetails, ExceptionType, TimestampError, SignatureError } from "../types";
 
 export class SingleSourceCheckerJob extends CheckerJob {
 
@@ -20,7 +20,7 @@ export class SingleSourceCheckerJob extends CheckerJob {
             level: receivedDataDetails.level,
             url: this.config.sources[0].url ? this.config.sources[0].url : this.config.sources[0].streamrEndpointPrefix,
             comment: error.message,
-            timestampDiffMilliseconds: receivedDataDetails.timestamp - receivedDataDetails.signedPriceDataType.priceData.timestamp
+            timestampDiffMilliseconds: receivedDataDetails.signedPriceDataType ? receivedDataDetails.timestamp - receivedDataDetails.signedPriceDataType.priceData.timestamp : undefined
         };
         return notificationDetails;
     }

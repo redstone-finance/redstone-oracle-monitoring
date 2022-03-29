@@ -4,6 +4,7 @@ const { mongodbInfo } = require("../config");
 const Notification = require("../models/notification");
 const Mail = require("../models/mail");
 const { notify } = require("./email-notifier-ses.js");
+import { ReceivedDataDetails, NotificationDetails, ExceptionLevel } from "../types";
 
 const MIN_MAIL_INTERVAL = 3 * 3600 * 1000; // 3 hours
 const MONGO_DASHBOARD_URL = mongodbInfo.mongoDashboardURL;
@@ -26,17 +27,17 @@ async function execute() {
 
   const errors = await Notification.countDocuments({
     timestamp: { $gte: minTimestamp },
-    level: "ERROR",
+    level: ExceptionLevel.ERROR,
   });
 
   const warnings = await Notification.countDocuments({
     timestamp: { $gte: minTimestamp },
-    level: "WARNING",
+    level: ExceptionLevel.WARNING,
   });
 
   const lastErrors = await Notification.find({
     timestamp: { $gte: minTimestamp },
-    level: "ERROR",
+    level: ExceptionLevel.ERROR,
   }).limit(ERRORS_LIMIT);
 
   const message = "Hello devs!\n\n"
@@ -47,20 +48,20 @@ async function execute() {
       url: MONGO_DASHBOARD_URL,
       mongoQueryForErrors: {
         timestamp: { $gte: minTimestamp, $lte: currentTimestamp },
-        level: "ERROR",
+        level: ExceptionLevel.ERROR,
       },
       mongoQueryForWarnings: {
         timestamp: { $gte: minTimestamp, $lte: currentTimestamp },
-        level: "WARNING",
+        level: ExceptionLevel.WARNING,
       },
       lastErrors,
     }, null, 2);
 
   let subject = "", shouldSend = true;
   if (errors > 0) {
-    subject = `[ERROR] - please check ${errors} errors`;
+    subject = `[${ExceptionLevel.ERROR}] - please check ${errors} errors`;
   } else if (warnings > 0) {
-    subject = `[WARNING] - please check ${warnings} warnings`;
+    subject = `[${ExceptionLevel.WARNING}] - please check ${warnings} warnings`;
   } else {
     shouldSend = false;
   }

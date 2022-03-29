@@ -5,8 +5,9 @@ const redstone = require("redstone-api-extended");
 const config = require("./config");
 const { connectToRemoteMongo } = require("./db-connector");
 const { execute: executeEmailNotifierJob } = require("./notifiers/email-notifier-job");
-const DataFeedCheckerJob = require("./source-monitoring/DataFeedCheckerJob");
-const SingleSourceCheckerJob = require("./source-monitoring/SingleSourceCheckerJob");
+const { DataFeedCheckerJob } = require("./source-monitoring/DataFeedCheckerJob");
+const { SingleSourceCheckerJob } = require("./source-monitoring/SingleSourceCheckerJob");
+const { ExceptionLevel } = require("./types");
 
 connectToRemoteMongo();
 const logger = consola.withTag("run-monitoring-service.js");
@@ -23,7 +24,7 @@ logger.info("Starting source monitoring jobs");
 for (const dataFeedId of config.dataFeedIds) {
   const defaultDataFeedConfig = redstone.oracle.getDefaultDataSourcesConfig(dataFeedId);
 
-  const job = new DataFeedCheckerJob(defaultDataFeedConfig, "ERROR", dataFeedId);
+  const job = new DataFeedCheckerJob(defaultDataFeedConfig, ExceptionLevel.ERROR, dataFeedId);
   schedule.scheduleJob(config.checkerSchedule, async () => {
     await job.execute();
   });
@@ -33,7 +34,7 @@ for (const dataFeedId of config.dataFeedIds) {
       ...defaultDataFeedConfig,
       sources: [source],
     };
-    const subJob = new SingleSourceCheckerJob(configForSingleSource, "WARNING");
+    const subJob = new SingleSourceCheckerJob(configForSingleSource, ExceptionLevel.WARNING);
     schedule.scheduleJob(config.checkerSchedule, async () => {
       await subJob.execute();
     });

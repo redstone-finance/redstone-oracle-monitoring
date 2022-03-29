@@ -24,6 +24,7 @@ export abstract class CheckerJob {
             timestamp: Date.now(),
             level: this.exceptionLevel
         }
+
         try {
             receivedDataDetails.signedPriceDataType = await this.getData();
         }

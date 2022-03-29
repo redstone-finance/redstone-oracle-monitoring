@@ -27,3 +27,23 @@ export interface NotificationDetails {
     comment?: string,
     timestampDiffMilliseconds?: number
 }
+
+export class TimestampError extends Error {
+    constructor(m: string) {
+        super(m);
+    }
+
+    sayHello() {
+        return "hello " + this.message;
+    }
+}
+
+export class SignatureError extends Error {
+    constructor(m: string) {
+        super(m);
+    }
+
+    sayHello() {
+        return "hello " + this.message;
+    }
+}

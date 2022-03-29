@@ -1,11 +1,11 @@
 import { DataSourcesConfig } from "redstone-api-extended/lib/oracle/redstone-data-feed";
 
 import { CheckerJob } from "./CheckerJob"
-import { ReceivedDataDetails, NotificationDetails, ExceptionType, ExceptionLevel } from "../types";
+import { ReceivedDataDetails, NotificationDetails, ExceptionType, ExceptionLevel, TimestampError, SignatureError } from "../types";
 
 
 export class DataFeedCheckerJob extends CheckerJob {
-    constructor(protected config: DataSourcesConfig, protected exceptionLevel: ExceptionLevel, protected dataFeedId: string) {
+    constructor(config: DataSourcesConfig, exceptionLevel: ExceptionLevel, protected dataFeedId: string) {
         super(config, exceptionLevel);
     }
 
@@ -26,7 +26,7 @@ export class DataFeedCheckerJob extends CheckerJob {
             level: receivedDataDetails.level,
             url: this.dataFeedId,
             comment: error.message,
-            timestampDiffMilliseconds: receivedDataDetails.timestamp - receivedDataDetails.signedPriceDataType.priceData.timestamp
+            timestampDiffMilliseconds: receivedDataDetails.signedPriceDataType ? receivedDataDetails.timestamp - receivedDataDetails.signedPriceDataType.priceData.timestamp : undefined
         };
         return notificationDetails;
     }

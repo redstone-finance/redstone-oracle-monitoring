@@ -2,10 +2,15 @@
     "compilerOptions": {
         "target": "es5",
         "module": "commonjs",
-        "sourceMap": true
+        "sourceMap": true,
+        "allowJs": true,
+        "esModuleInterop": true,
+        "outDir": "./dist"
     },
     "include": [
         "src/source-monitoring/*",
-        "src/types.ts"
+        "src/models/*",
+        "src/notifiers/*",
+        "src/*"
     ]
 }
