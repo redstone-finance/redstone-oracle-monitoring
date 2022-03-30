@@ -11,7 +11,7 @@
             "skipFiles": [
                 "<node_internals>/**"
             ],
-            "program": "${workspaceFolder}\\src\\run-monitoring-service.js",
+            "program": "${workspaceFolder}\\dist\\run-monitoring-service.js",
             "outFiles": [
                 "${workspaceFolder}/**/*.js"
             ]

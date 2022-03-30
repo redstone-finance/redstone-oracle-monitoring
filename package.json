@@ -1,10 +1,18 @@
 {
+  "name": "redstone-oracle-monitoring",
+  "version": "1.0.0",
+  "description": "",
+  "main": "dist/run-monitoring-service.js",
   "scripts": {
-    "transpile": "tsc --project tsconfig.json",
+    "build": "tsc --project tsconfig.json",
     "start": "node ./dist/run-monitoring-service.js",
-    "start:ts": "ts-node ./src/run-monitoring-service.js",
-    "prepare": "yarn build"
+    "start:dev": "ts-node ./src/run-monitoring-service.js"
   },
+  "author": "Redstone Team <dev@redstone.finance>",
+  "contributors": [
+    "Mikolaj Kowalczewski <mikolaj@redstone.finance>",
+    "Alex Suvorov <alex@redstone.finance>"
+  ],
   "dependencies": {
     "aws-sdk": "^2.1061.0",
     "axios": "^0.24.0",
@@ -12,7 +20,7 @@
     "mailgun-js": "^0.22.0",
     "mongoose": "^6.1.6",
     "node-schedule": "^2.1.0",
-    "redstone-api-extended": "^1.0.3",
+    "redstone-api-extended": "^1.0.4",
     "streamr-client": "^5.4.5",
     "url": "^0.11.0"
   },

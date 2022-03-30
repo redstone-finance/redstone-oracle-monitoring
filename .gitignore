@@ -1,8 +1,12 @@
 # Secrets
 .secrets/
 
+# Debugger options
+.vscode/
+
 # Dependency directories
 node_modules/
 
 # Compiled JS
 dist/
+

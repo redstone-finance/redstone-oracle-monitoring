@@ -2,7 +2,8 @@ import { DataSourcesConfig } from "redstone-api-extended/lib/oracle/redstone-dat
 
 import { CheckerJob } from "./CheckerJob"
 import { ReceivedDataDetails, NotificationDetails, ExceptionType, ExceptionLevel, TimestampError, SignatureError } from "../types";
-
+import InvalidSignatureError from "redstone-api-extended/lib/errors/invalid-signature";
+import TooOldTimestampError from "redstone-api-extended/lib/errors/too-old-timestamp";
 
 export class DataFeedCheckerJob extends CheckerJob {
     constructor(config: DataSourcesConfig, exceptionLevel: ExceptionLevel, protected dataFeedId: string) {
@@ -12,9 +13,9 @@ export class DataFeedCheckerJob extends CheckerJob {
     prepareNotification(error: Error, receivedDataDetails: ReceivedDataDetails): NotificationDetails {
         var type: ExceptionType;
 
-        if (error instanceof TimestampError) {
+        if (error.name === 'TooOldTimestampError') {
             type = ExceptionType.timestampDiff;
-        } else if (error instanceof SignatureError) {
+        } else if (error.name === 'InvalidSignatureError') {
             type = ExceptionType.invalidSignature;
         } else {
             type = ExceptionType.fetchingFailed;

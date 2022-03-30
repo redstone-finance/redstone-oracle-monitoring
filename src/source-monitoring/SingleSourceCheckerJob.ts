@@ -1,14 +1,20 @@
 import { CheckerJob } from "./CheckerJob"
 import { ReceivedDataDetails, NotificationDetails, ExceptionType, TimestampError, SignatureError } from "../types";
+import InvalidSignatureError from "redstone-api-extended/lib/errors/invalid-signature";
+import TooOldTimestampError from "redstone-api-extended/lib/errors/too-old-timestamp";
 
 export class SingleSourceCheckerJob extends CheckerJob {
 
     prepareNotification(error: Error, receivedDataDetails: ReceivedDataDetails): NotificationDetails {
         var type: ExceptionType;
 
-        if (error instanceof TimestampError) {
+        // We receive errors in Array (instanceof AggregateError from bluebird library) but
+        // because it is CheckerJob for single source, so we are sure that it's length is 1
+        var e = error[0];
+
+        if (e.name === 'TooOldTimestampError') {
             type = ExceptionType.timestampDiff;
-        } else if (error instanceof SignatureError) {
+        } else if (e.name === 'InvalidSignatureError') {
             type = ExceptionType.invalidSignature;
         } else {
             type = ExceptionType.fetchingFailed;

@@ -13,7 +13,7 @@ const dataFeedIds = [
     "redstone-stocks",
     "redstone"
 ];
-const checkerSchedule = "*/10 * * * * *";
+const checkerSchedule = "*/30 * * * * *";
 
 module.exports = {
     redstoneApi,
