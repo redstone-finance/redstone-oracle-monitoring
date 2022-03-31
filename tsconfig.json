@@ -12,5 +12,9 @@
         "src/models/*",
         "src/notifiers/*",
         "src/*"
+    ],
+    "exclude": [
+        "node_modules",
+        "test"
     ]
 }

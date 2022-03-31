@@ -1,6 +1,7 @@
 # RedStone Oracle Monitoring
 RedStone Oracle Monitoring is an application used to periodically download and validate information on cryptocurrency prices. If an error related to the timestamp or the format of the downloaded data is detected, an appropriate message is recorded in the database.
 - [Installation](#installation)
+- [Preparation](#Preparation)
 - [Running](#running)
 - [Configuration](#configuration)
     - [Data sources](#Data-Sources)
@@ -11,9 +12,23 @@ RedStone Oracle Monitoring is an application used to periodically download and v
 or
 `yarn install`
 
+## Preparation 
+
+`tsc --project tsconfig.json`
+or
+`yarn build`
+
 ## Running
 
-`node ./src/run-monitoring-service.js`
+Development version:
+`ts-node ./src/run-monitoring-service.js`
+or
+`yarn start:dev`
+
+Production version:
+`node ./dist/run-monitoring-service.js`
+or
+`yarn start`
 
 
 ## Configuration

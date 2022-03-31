@@ -1,0 +1,19 @@
+{
+  "transform": {
+    "^.+\\.(t|j)sx?$": "ts-jest"
+  },
+  "verbose": true,
+  "bail": 1,
+  "testEnvironment": "node",
+  "collectCoverage": false,
+  "testTimeout": 120000,
+  "testRegex": "(/__tests__/.*|(\\.|/)(test|spec))\\.(jsx?|tsx?)$",
+  "moduleFileExtensions": [
+    "ts",
+    "tsx",
+    "js",
+    "jsx",
+    "json",
+    "node"
+  ]
+}
