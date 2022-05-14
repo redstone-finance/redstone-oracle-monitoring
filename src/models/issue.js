@@ -1,7 +1,7 @@
 const mongoose = require("mongoose");
 const Schema = mongoose.Schema;
 
-const NotificationSchema = new Schema({
+const IssueSchema = new Schema({
   timestamp: {
     type: Number,
     required: true,
@@ -9,12 +9,29 @@ const NotificationSchema = new Schema({
   type: {
     type: String,
     required: true,
-    enum: ["timestamp-diff", "invalid-signature", "fetching-failed"]
+    enum: [
+      "timestamp-diff",
+      "invalid-signature",
+      "one-source-failed",
+      "data-feed-failed",
+    ],
+  },
+  symbol: {
+    type: String,
+    required: false,
   },
   level: {
     type: String,
     required: true,
-    enum: ["ERROR", "WARNING"]
+    enum: ["ERROR", "WARNING"],
+  },
+  dataFeedId: {
+    type: String,
+    required: true,
+  },
+  evmSignerAddress: {
+    type: String,
+    required: false,
   },
   url: {
     type: String,
@@ -30,4 +47,4 @@ const NotificationSchema = new Schema({
   },
 });
 
-module.exports = mongoose.model("Notification", NotificationSchema);
+module.exports = mongoose.model("Issue", IssueSchema);

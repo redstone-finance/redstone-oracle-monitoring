@@ -1,4 +1,4 @@
-var AWS = require('aws-sdk');
+var AWS = require("aws-sdk");
 const { SES } = require("../config");
 
 const { dirPath } = require("../config");
@@ -12,13 +12,13 @@ async function notify(subject, message) {
   return await sendEmail({
     subject: subject,
     text: message,
-    html: `<pre style='font-size: 12px;'>${message}</pre>`,
+    html: `<pre style="font-size: 12px;">${message}</pre>`,
   });
 };
 
 
 async function sendEmail({ subject, text, html }) {
-  var sendPromise = new AWS.SES({ apiVersion: '2010-12-01' });
+  var sendPromise = new AWS.SES({ apiVersion: "2010-12-01" });
 
   const params = {
     Destination: {
@@ -38,7 +38,7 @@ async function sendEmail({ subject, text, html }) {
         }
       },
       Subject: {
-        Charset: 'UTF-8',
+        Charset: "UTF-8",
         Data: subject
       }
     },
