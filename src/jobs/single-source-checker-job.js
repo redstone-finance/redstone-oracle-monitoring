@@ -57,7 +57,7 @@ async function execute({
     await new Issue({
       timestamp: currentTimestamp,
       type: "one-source-failed",
-      level: "ERROR",
+      level: "WARNING",
       dataFeedId,
       evmSignerAddress: singleSourceConfig.evmSignerAddress,
       url: singleSourceConfig.url,
