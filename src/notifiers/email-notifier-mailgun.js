@@ -1,9 +1,6 @@
 const mailgun = require("mailgun-js");
 
-const { mailInfo } = require("../config");
-
-const DEV_EMAIL = mailInfo.devEmail;
-const SENDER_EMAIL = mailInfo.senderEmail; // It is verified in sendgrid 
+const config = require("../config");
 
 async function notify(subject, message) {
   return await sendEmail({
@@ -11,15 +8,17 @@ async function notify(subject, message) {
     text: message,
     html: `<pre style='font-size: 8px;'>${message}</pre>`,
   });
-};
+}
 
 async function sendEmail({ subject, text, html }) {
-  const DOMAIN = mailInfo.domain;
-  const mg = mailgun({ apiKey: mailInfo.apiKey, domain: DOMAIN });
+  const mg = mailgun({
+    apiKey: config.mailgun.apiKey,
+    domain: config.mailgun.domain,
+  });
 
   const msg = {
-    to: DEV_EMAIL,
-    from: SENDER_EMAIL,
+    to: config.emailNotificationsRecipients,
+    from: config.mailgun.senderEmail,
     subject: subject,
     text,
     html,

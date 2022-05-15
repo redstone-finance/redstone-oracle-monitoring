@@ -1,9 +1,10 @@
 var AWS = require("aws-sdk");
 const { SES } = require("../config");
 
+// TODO: fix this module
+
 const { dirPath } = require("../config");
 AWS.config.loadFromPath(dirPath);
-
 
 const DEV_EMAIL = SES.devEmail;
 const SENDER_EMAIL = SES.senderEmail;
@@ -14,35 +15,32 @@ async function notify(subject, message) {
     text: message,
     html: `<pre style="font-size: 12px;">${message}</pre>`,
   });
-};
-
+}
 
 async function sendEmail({ subject, text, html }) {
   var sendPromise = new AWS.SES({ apiVersion: "2010-12-01" });
 
   const params = {
     Destination: {
-      ToAddresses: [
-        DEV_EMAIL,
-      ]
+      ToAddresses: [DEV_EMAIL],
     },
     Message: {
       Body: {
         Html: {
           Charset: "UTF-8",
-          Data: html
+          Data: html,
         },
         Text: {
           Charset: "UTF-8",
-          Data: text
-        }
+          Data: text,
+        },
       },
       Subject: {
         Charset: "UTF-8",
-        Data: subject
-      }
+        Data: subject,
+      },
     },
-    Source: SENDER_EMAIL
+    Source: SENDER_EMAIL,
   };
 
   return await sendPromise.sendEmail(params).promise();

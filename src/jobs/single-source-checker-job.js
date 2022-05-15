@@ -2,21 +2,21 @@ const redstone = require("redstone-api-extended");
 const consola = require("consola");
 const Metric = require("../models/metric");
 const Issue = require("../models/issue");
-
-const logger = consola.withTag("email-notifier-job");
+const { stringifyError } = require("../helpers/error-stringifier");
 
 async function execute({
   dataFeedId,
   minTimestampDiffForWarning,
   sourcesConfig,
 }) {
-  logger.info(
-    `Checking a single source in data feed: ${dataFeedId}. ` +
-      `Source config: ${sourcesConfig}`
-  );
   const currentTimestamp = Date.now();
   const singleSourceConfig = sourcesConfig.sources[0];
   const dataSourceName = `${dataFeedId}-${singleSourceConfig.type}-${singleSourceConfig.url}`;
+  const logger = consola.withTag(`email-notifier-job-${dataSourceName}`);
+  logger.info(
+    `Checking a single source in data feed: ${dataFeedId}. ` +
+      `Source config: ${JSON.stringify(singleSourceConfig)}`
+  );
 
   try {
     // Trying to fetch from redstone
@@ -25,22 +25,22 @@ async function execute({
       maxTimestampDiffMilliseconds: 28 * 24 * 3600 * 1000, // 28 days - we don't want to raise error if data is too old
     });
 
-    const timestampDiff = currentTimestamp - response.timestamp;
+    const timestampDiff = currentTimestamp - response.priceData.timestamp;
 
     // Saving metric to DB
-    // TODO: add logging
-    await new Metric({
-      name: `timestamp-diff-${dataSourceName}`,
-      value: timestampDiff,
-      timestamp: currentTimestamp,
-      tags: {
-        dataFeedId,
-        evmSignerAddress: singleSourceConfig.evmSignerAddress,
-      },
-    }).save();
+    safelySaveMetricInDB({
+      logger,
+      metricName: `timestamp-diff-${dataSourceName}`,
+      timestampDiff,
+      timestamp: response.priceData.timestamp,
+      dataFeedId,
+      singleSourceConfig,
+    });
 
     if (timestampDiff > minTimestampDiffForWarning) {
-      // TODO: add logging
+      logger.warn(
+        `Timestamp diff is quite big: ${timestampDiff}. Saving issue in DB`
+      );
       await new Issue({
         timestamp: currentTimestamp,
         type: "timestamp-diff",
@@ -53,7 +53,7 @@ async function execute({
     }
   } catch (e) {
     const errStr = stringifyError(e);
-    // TODO: add logging
+    logger.error(`Error occured: ${errStr}. Saving issue in DB`);
     await new Issue({
       timestamp: currentTimestamp,
       type: "one-source-failed",
@@ -63,6 +63,32 @@ async function execute({
       url: singleSourceConfig.url,
       comment: errStr,
     }).save();
+  }
+}
+
+async function safelySaveMetricInDB({
+  logger,
+  metricName,
+  timestampDiff,
+  timestamp,
+  dataFeedId,
+  singleSourceConfig,
+}) {
+  try {
+    logger.info(
+      `Saving metric to DB. Name: ${metricName}, Value: ${timestampDiff}`
+    );
+    await new Metric({
+      name: metricName,
+      value: timestampDiff,
+      timestamp,
+      tags: {
+        dataFeedId,
+        evmSignerAddress: singleSourceConfig.evmSignerAddress,
+      },
+    }).save();
+  } catch (e) {
+    logger.error(`Metric saving failed: ${stringifyError(e)}`);
   }
 }
 

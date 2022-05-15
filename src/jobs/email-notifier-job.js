@@ -2,7 +2,7 @@ const consola = require("consola");
 
 const Issue = require("../models/issue");
 const Mail = require("../models/mail");
-const { notify } = require("../notifiers/email-notifier-ses.js");
+const { notify } = require("../notifiers/email-notifier-mailgun");
 
 const MIN_MAIL_INTERVAL = 3 * 3600 * 1000; // 3 hours
 const MONGO_DASHBOARD_URL = "https://todo.implement.dashboard/";
@@ -63,9 +63,9 @@ async function execute() {
   let subject = "",
     shouldSend = true;
   if (errors > 0) {
-    subject = `[ERROR] - please check ${errors} errors`;
+    subject = `[ERROR] - (V2) please check ${errors} errors`;
   } else if (warnings > 0) {
-    subject = `[WARNING] - please check ${warnings} warnings`;
+    subject = `[WARNING] - (V2) please check ${warnings} warnings`;
   } else {
     shouldSend = false;
   }

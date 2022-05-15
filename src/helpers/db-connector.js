@@ -1,11 +1,9 @@
 const mongoose = require("mongoose");
-const { mongodbInfo } = require("../config");
-
-const url = mongodbInfo.connectionString;
+const config = require("../config");
 
 async function connectToRemoteMongo() {
   await mongoose
-    .connect(url, {
+    .connect(config.mongoDbUrl, {
       useNewUrlParser: true,
       useUnifiedTopology: true,
     })

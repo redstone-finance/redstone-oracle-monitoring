@@ -3,9 +3,10 @@ const consola = require("consola");
 const Issue = require("../models/issue");
 const { stringifyError } = require("../helpers/error-stringifier");
 
-const logger = consola.withTag("email-notifier-job");
-
 async function execute({ dataFeedId, symbol }) {
+  const logger = consola.withTag(
+    `data-feed-checker-job-${dataFeedId}-${symbol}`
+  );
   logger.info(
     `Checking data feed: ${dataFeedId}${symbol ? " with symbol " + symbol : ""}`
   );
@@ -15,7 +16,11 @@ async function execute({ dataFeedId, symbol }) {
     await redstone.oracle.getFromDataFeed(dataFeedId, symbol);
   } catch (e) {
     const errStr = stringifyError(e);
-    logger.error(`Error occured. Saving issue in DB: errStr`);
+    logger.error(
+      `Error occured in data feed checker-job ` +
+        `(${dataFeedId}-${symbol})` +
+        `Saving issue in DB: ${errStr}`
+    );
     await new Issue({
       timestamp: currentTimestamp,
       type: "data-feed-failed",

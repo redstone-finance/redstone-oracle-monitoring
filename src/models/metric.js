@@ -17,11 +17,11 @@ const MetricSchema = new Schema({
 
   tags: {
     dataFeedId: {
-      type: Number,
+      type: String,
       required: false,
     },
     evmSignerAddress: {
-      type: Number,
+      type: String,
       required: false,
     },
   },

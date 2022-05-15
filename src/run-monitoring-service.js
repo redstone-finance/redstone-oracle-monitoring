@@ -3,7 +3,7 @@ const consola = require("consola");
 const redstone = require("redstone-api-extended");
 
 const config = require("./config");
-const { connectToRemoteMongo } = require("./db-connector");
+const { connectToRemoteMongo } = require("./helpers/db-connector");
 const emailNotifierJob = require("./jobs/email-notifier-job");
 const dataFeedCheckerJob = require("./jobs/data-feed-checker-job");
 const singleSourceCheckerJob = require("./jobs/single-source-checker-job");
@@ -58,9 +58,7 @@ function runMonitoringService() {
         dataFeed.id
       );
       for (const source of dataFeedSourcesConfig.sources) {
-        logger.info(
-          `Starting single source checker job for: ${dataFeed.id} (${symbol})`
-        );
+        logger.info(`Starting single source checker job for: ${dataFeed.id}`);
         schedule.scheduleJob(dataFeed.schedule, () =>
           singleSourceCheckerJob.execute({
             dataFeedId: dataFeed.id,

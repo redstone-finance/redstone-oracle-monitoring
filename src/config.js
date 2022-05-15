@@ -12,7 +12,9 @@ module.exports = {
   mailgun: {
     domain: getFromEnv("MAILGUN_DOMAIN"),
     apiKey: getFromEnv("MAILGUN_API_KEY"),
+    senderEmail: getFromEnv("MAILGUN_SENDER_EMAIL"),
   },
+  emailNotificationsRecipients: getFromEnv("EMAIL_NOTIFICATIONS_RECIPIENTS"),
   mongoDbUrl: getFromEnv("MONGO_DB_URL"),
   metricsUrl: getFromEnv("METRICS_URL"),
   emailNotifierJobSchedule: "*/10 * * * * *", // Every 10 seconds
