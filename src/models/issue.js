@@ -16,7 +16,7 @@ const IssueSchema = new Schema({
       "data-feed-failed",
     ],
   },
-  symbol: {
+    symbol: {
     type: String,
     required: false,
   },
