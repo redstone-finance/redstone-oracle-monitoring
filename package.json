@@ -15,7 +15,20 @@
     "url": "^0.11.0"
   },
   "devDependencies": {
+    "husky": "^8.0.1",
+    "lint-staged": "^12.4.1",
     "ts-node": "^10.7.0",
     "typescript": "^4.6.2"
+  },
+  "husky": {
+    "hooks": {
+      "pre-commit": "lint-staged"
+    }
+  },
+  "lint-staged": {
+    "*.{js,md,json}": [
+      "prettier --write",
+      "git add"
+    ]
   }
 }

@@ -6,7 +6,7 @@ const IssueSchema = new Schema({
     type: Number,
     required: true,
   },
-  type: {
+               type: {
     type: String,
     required: true,
     enum: [
