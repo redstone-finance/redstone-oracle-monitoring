@@ -12,8 +12,7 @@
     "mailgun-js": "^0.22.0",
     "mongoose": "^6.1.6",
     "node-schedule": "^2.1.0",
-    "redstone-api-extended": "^1.0.7",
-    "streamr-client": "^5.4.5",
+    "redstone-api-extended": "^1.0.9",
     "url": "^0.11.0"
   },
   "devDependencies": {
