@@ -35,7 +35,7 @@ const IssueSchema = new Schema({
   },
   url: {
     type: String,
-    required: true,
+    required: false,
   },
   comment: {
     type: String,

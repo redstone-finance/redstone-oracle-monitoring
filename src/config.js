@@ -41,7 +41,7 @@ module.exports = {
       symbolsToCheck: ["ETH"],
       checkEachSingleSource: true,
       minTimestampDiffForWarning: 20000,
-      schedule: "10 * * * *", // Every hour at 10th minute
+      schedule: "*/10 * * * *", // Every 10 minutes
     },
     {
       id: "redstone-avalanche",

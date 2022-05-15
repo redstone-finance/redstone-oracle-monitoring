@@ -18,7 +18,7 @@ async function execute({ dataFeedId, symbol }) {
     const errStr = stringifyError(e);
     logger.error(
       `Error occured in data feed checker-job ` +
-        `(${dataFeedId}-${symbol})` +
+        `(${dataFeedId}-${symbol}). ` +
         `Saving issue in DB: ${errStr}`
     );
     await new Issue({
