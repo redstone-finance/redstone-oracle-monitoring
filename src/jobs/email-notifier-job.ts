@@ -1,8 +1,8 @@
-const consola = require("consola");
+import consola from "consola";
 
-const Issue = require("../models/issue");
-const Mail = require("../models/mail");
-const { notify } = require("../notifiers/email-notifier-mailgun");
+import { Issue } from "../models/issue";
+import { Mail } from "../models/mail";
+import { notify } from "../notifiers/email-notifier-mailgun";
 
 const MIN_MAIL_INTERVAL = 3 * 3600 * 1000; // 3 hours
 const MONGO_DASHBOARD_URL = "https://todo.implement.dashboard/";
@@ -11,7 +11,7 @@ const ERRORS_LIMIT = 5;
 const logger = consola.withTag("email-notifier-job");
 
 // Counts warnings and errors for the last 6 minutes
-async function execute() {
+export const execute = async () => {
   const currentTimestamp = Date.now();
   const minTimestamp = currentTimestamp - MIN_MAIL_INTERVAL;
 
@@ -78,8 +78,4 @@ async function execute() {
   } else {
     logger.info("No new notifications to send. Skipping...");
   }
-}
-
-module.exports = {
-  execute,
 };

@@ -1,14 +1,25 @@
-const redstone = require("redstone-api-extended");
-const consola = require("consola");
-const Metric = require("../models/metric");
-const Issue = require("../models/issue");
-const { stringifyError } = require("../helpers/error-stringifier");
+import redstone from "redstone-api-extended";
+import consola, { Consola } from "consola";
+import { Metric } from "../models/metric";
+import { Issue } from "../models/issue";
+import { stringifyError } from "../helpers/error-stringifier";
+import {
+  DataFeedId,
+  DataSourcesConfig,
+} from "redstone-api-extended/lib/oracle/redstone-data-feed";
+import { SourceConfig } from "redstone-api-extended/lib/oracle/fetchers/Fetcher";
 
-async function execute({
+interface Input {
+  dataFeedId: DataFeedId;
+  minTimestampDiffForWarning: number;
+  sourcesConfig: DataSourcesConfig;
+}
+
+export const execute = async ({
   dataFeedId,
   minTimestampDiffForWarning,
   sourcesConfig,
-}) {
+}: Input) => {
   const currentTimestamp = Date.now();
   const singleSourceConfig = sourcesConfig.sources[0];
   const dataSourceName = `${dataFeedId}-${singleSourceConfig.type}-${singleSourceConfig.url}`;
@@ -64,16 +75,25 @@ async function execute({
       comment: errStr,
     }).save();
   }
+};
+
+interface SaveMetricInput {
+  logger: Consola;
+  metricName: string;
+  timestampDiff: number;
+  timestamp: number;
+  dataFeedId: DataFeedId;
+  singleSourceConfig: SourceConfig;
 }
 
-async function safelySaveMetricInDB({
+const safelySaveMetricInDB = async ({
   logger,
   metricName,
   timestampDiff,
   timestamp,
   dataFeedId,
   singleSourceConfig,
-}) {
+}: SaveMetricInput) => {
   try {
     logger.info(
       `Saving metric to DB. Name: ${metricName}, Value: ${timestampDiff}`
@@ -90,8 +110,4 @@ async function safelySaveMetricInDB({
   } catch (e) {
     logger.error(`Metric saving failed: ${stringifyError(e)}`);
   }
-}
-
-module.exports = {
-  execute,
 };

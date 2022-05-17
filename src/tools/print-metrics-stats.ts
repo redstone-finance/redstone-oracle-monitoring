@@ -1,7 +1,6 @@
-const { connectToRemoteMongo } = require("../db-connector");
-const Issue = require("../models/issue");
+import { connectToRemoteMongo } from "../helpers/db-connector";
 
-async function main() {
+const main = async () => {
   await connectToRemoteMongo();
 
   // TODO: analyze
@@ -11,4 +10,4 @@ async function main() {
 
   // Average, min, max per each data feed
   // Average, min, max per each cache layer
-}
+};

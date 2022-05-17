@@ -1,23 +1,31 @@
-var AWS = require("aws-sdk");
-const { SES } = require("../config");
+import AWS from "aws-sdk";
+// import { SES } from "../config";
 
 // TODO: fix this module
 
-const { dirPath } = require("../config");
-AWS.config.loadFromPath(dirPath);
+// import { dirPath } from "../config";
+// AWS.config.loadFromPath(dirPath);
 
-const DEV_EMAIL = SES.devEmail;
-const SENDER_EMAIL = SES.senderEmail;
+// const DEV_EMAIL = SES.devEmail;
+// const SENDER_EMAIL = SES.senderEmail;
+const DEV_EMAIL = "SES.devEmail";
+const SENDER_EMAIL = "SES.senderEmail";
 
-async function notify(subject, message) {
+export const notify = async (subject: string, message: string) => {
   return await sendEmail({
     subject: subject,
     text: message,
     html: `<pre style="font-size: 12px;">${message}</pre>`,
   });
+};
+
+interface SendEmailInput {
+  subject: string;
+  text: string;
+  html: string;
 }
 
-async function sendEmail({ subject, text, html }) {
+export const sendEmail = async ({ subject, text, html }: SendEmailInput) => {
   var sendPromise = new AWS.SES({ apiVersion: "2010-12-01" });
 
   const params = {
@@ -44,6 +52,4 @@ async function sendEmail({ subject, text, html }) {
   };
 
   return await sendPromise.sendEmail(params).promise();
-}
-
-module.exports = { notify };
+};

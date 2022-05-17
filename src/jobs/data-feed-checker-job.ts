@@ -1,9 +1,15 @@
-const redstone = require("redstone-api-extended");
-const consola = require("consola");
-const Issue = require("../models/issue");
-const { stringifyError } = require("../helpers/error-stringifier");
+import redstone from "redstone-api-extended";
+import consola from "consola";
+import { Issue } from "../models/issue";
+import { stringifyError } from "../helpers/error-stringifier";
+import { DataFeedId } from "redstone-api-extended/lib/oracle/redstone-data-feed";
 
-async function execute({ dataFeedId, symbol }) {
+interface Input {
+  dataFeedId: DataFeedId;
+  symbol?: string;
+}
+
+export const execute = async ({ dataFeedId, symbol }: Input) => {
   const logger = consola.withTag(
     `data-feed-checker-job-${dataFeedId}-${symbol}`
   );
@@ -30,8 +36,4 @@ async function execute({ dataFeedId, symbol }) {
       comment: errStr,
     }).save();
   }
-}
-
-module.exports = {
-  execute,
 };
