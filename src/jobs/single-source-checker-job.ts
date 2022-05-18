@@ -22,7 +22,7 @@ export const execute = async ({
 }: Input) => {
   const currentTimestamp = Date.now();
   const singleSourceConfig = sourcesConfig.sources[0];
-  const dataSourceName = `${dataFeedId}-${singleSourceConfig.type}-${singleSourceConfig.url}`;
+  const dataSourceName = `${dataFeedId}-${singleSourceConfig.type}-${singleSourceConfig.url}-${evmSignerAddress}`;
   const logger = consola.withTag(`email-notifier-job-${dataSourceName}`);
   logger.info(
     `Checking a single source in data feed: ${dataFeedId}. ` +
