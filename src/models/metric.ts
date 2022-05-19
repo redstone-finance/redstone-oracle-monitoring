@@ -1,7 +1,17 @@
 import mongoose from "mongoose";
 const Schema = mongoose.Schema;
 
-const MetricSchema = new Schema({
+export interface IMetric {
+  name: string;
+  value: number;
+  timestamp: number;
+  tags: {
+    dataFeedId?: string;
+    evmSignerAddress?: string;
+  };
+}
+
+const MetricSchema = new Schema<IMetric>({
   name: {
     type: String,
     required: true,

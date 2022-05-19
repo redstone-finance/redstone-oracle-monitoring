@@ -1,7 +1,19 @@
 import mongoose from "mongoose";
 const Schema = mongoose.Schema;
 
-const IssueSchema = new Schema({
+export interface IIssue {
+  timestamp: number;
+  type: string;
+  symbol?: string;
+  level: string;
+  dataFeedId: string;
+  evmSignerAddress?: string;
+  url?: string;
+  comment?: string;
+  timestampDiffMilliseconds?: number;
+}
+
+const IssueSchema = new Schema<IIssue>({
   timestamp: {
     type: Number,
     required: true,
