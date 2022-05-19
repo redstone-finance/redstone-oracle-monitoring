@@ -32,3 +32,8 @@ export const disconnectFromRemoteMongo = async () => {
   await mongoose.disconnect();
   logger.log("Disconnected from MongoDB");
 };
+
+export const disconnectFromRemoteMongo = async () => {
+  await mongoose.disconnect();
+  console.log("Disconnected from MongoDB");
+};
