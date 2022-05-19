@@ -70,3 +70,8 @@ export const dataFeedsToCheck = [
     schedule: "*/10 * * * * *", // Every 10 seconds
   },
 ];
+
+export const telegramConfig = {
+  token: getFromEnv("TELEGRAM_TOKEN"),
+  chatId: getFromEnv("TELEGRAM_CHAT_ID"),
+};
