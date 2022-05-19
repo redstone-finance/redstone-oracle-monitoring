@@ -75,3 +75,5 @@ export const telegramConfig = {
   token: getFromEnv("TELEGRAM_TOKEN"),
   chatId: getFromEnv("TELEGRAM_CHAT_ID"),
 };
+
+export const dbTtlInDays = getFromEnv("DB_DATA_TTL_DAYS");
