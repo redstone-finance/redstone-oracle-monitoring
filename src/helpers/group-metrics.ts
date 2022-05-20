@@ -1,8 +1,8 @@
-import { IMetric } from "../models/metric";
-import { calculateAverage } from "./calculate-average";
-import { calculateMedian } from "./calculate-median";
+import { Metric } from "../models/metric";
+import { calculateAverage } from "./math-helpers";
+import { calculateMedian } from "./math-helpers";
 
-export const groupMetrics = (metrics: IMetric[], uniqueNames: string[]) => {
+export const groupMetrics = (metrics: Metric[], uniqueNames: string[]) => {
   const groupedMetrics = {};
   uniqueNames.forEach((name) => {
     const filteredMetricsValues = metrics.reduce((array, metric) => {

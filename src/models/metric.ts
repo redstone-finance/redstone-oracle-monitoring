@@ -1,7 +1,7 @@
 import mongoose from "mongoose";
 const Schema = mongoose.Schema;
 
-export interface IMetric {
+export interface Metric {
   name: string;
   value: number;
   timestamp: number;
@@ -11,7 +11,7 @@ export interface IMetric {
   };
 }
 
-const MetricSchema = new Schema<IMetric>({
+const MetricSchema = new Schema<Metric>({
   name: {
     type: String,
     required: true,

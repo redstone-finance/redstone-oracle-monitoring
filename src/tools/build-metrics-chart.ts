@@ -1,12 +1,14 @@
 const plotly = require("plotly")("hatskier", "vyujwn0zVNWbWR73W5Jh");
 import open from "open";
 import prompts from "prompts";
-import { askUserForTimeframe } from "../utils/ask-user-timeframe";
-import { fetchMetricsByFromDate } from "../utils/fetch-metrics-by-from-date";
+import { askUserForTimeframe } from "../helpers/ask-user-timeframe";
+import { fetchByFromDate } from "../helpers/fetch-by-from-date";
+import { Metric } from "../models/metric";
 
 (async () => {
-  const { fromTimestamp } = await askUserForTimeframe();
-  const metrics = await fetchMetricsByFromDate(fromTimestamp);
+  const toTimestamp = Date.now();
+  const { fromTimestamp } = await askUserForTimeframe(toTimestamp);
+  const metrics = await fetchByFromDate<Metric>(Metric, fromTimestamp);
   const uniqueMetricsNames = [...new Set(metrics.map((metric) => metric.name))];
 
   const response = await prompts({

@@ -1,9 +1,9 @@
-import { IIssue } from "../models/issue";
+import { Issue } from "../models/issue";
 
 export const groupIssuesByAttribute = (
-  issues: IIssue[],
+  issues: Issue[],
   uniqueAttributes: string[],
-  attributeName: keyof IIssue
+  attributeName: keyof Issue
 ) => {
   const groupedByAttribute = {};
   uniqueAttributes.forEach((attributeValue) => {
