@@ -1,12 +1,14 @@
-import { askUserForTimeframe } from "../utils/ask-user-timeframe";
-import { fetchIssuesByFromDate } from "../utils/fetch-issues-by-from-date";
-import { groupIssuesByAttribute } from "../utils/group-issues-by-attribute";
-import { log } from "../utils/nice-logger";
+import { askUserForTimeframe } from "../helpers/ask-user-timeframe";
+import { fetchByFromDate } from "../helpers/fetch-by-from-date";
+import { groupIssuesByAttribute } from "../helpers/group-issues-by-attribute";
+import { log } from "../helpers/nice-logger";
+import { Issue } from "../models/issue";
 
 (async () => {
-  const { fromTimestamp, toTimestamp } = await askUserForTimeframe();
+  const toTimestamp = Date.now();
+  const { fromTimestamp } = await askUserForTimeframe(toTimestamp);
 
-  const issues = await fetchIssuesByFromDate(fromTimestamp);
+  const issues = await fetchByFromDate<Issue>(Issue, fromTimestamp);
   const uniqueDataFeeds = [...new Set(issues.map((issue) => issue.dataFeedId))];
   const uniqueUrls = [...new Set(issues.map((issue) => issue.url))];
 

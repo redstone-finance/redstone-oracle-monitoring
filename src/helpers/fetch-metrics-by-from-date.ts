@@ -1,7 +1,4 @@
-import {
-  connectToRemoteMongo,
-  disconnectFromRemoteMongo,
-} from "../helpers/db-connector";
+import { connectToRemoteMongo } from "../helpers/db-connector";
 import { Metric } from "../models/metric";
 
 export const fetchMetricsByFromDate = async (fromTimestamp: number) => {
@@ -13,6 +10,5 @@ export const fetchMetricsByFromDate = async (fromTimestamp: number) => {
 
   await connectToRemoteMongo();
   const metrics = await Metric.find(fromTimestampCondition);
-  await disconnectFromRemoteMongo();
   return metrics;
 };

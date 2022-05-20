@@ -1,7 +1,7 @@
 import mongoose from "mongoose";
 const Schema = mongoose.Schema;
 
-export interface IIssue {
+export interface Issue {
   timestamp: number;
   type: string;
   symbol?: string;
@@ -13,7 +13,7 @@ export interface IIssue {
   timestampDiffMilliseconds?: number;
 }
 
-const IssueSchema = new Schema<IIssue>({
+const IssueSchema = new Schema<Issue>({
   timestamp: {
     type: Number,
     required: true,

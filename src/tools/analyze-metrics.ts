@@ -1,10 +1,11 @@
-import { askUserForTimeframe } from "../utils/ask-user-timeframe";
-import { fetchMetricsByFromDate } from "../utils/fetch-metrics-by-from-date";
-import { groupMetrics } from "../utils/group-metrics";
-import { log } from "../utils/nice-logger";
+import { askUserForTimeframe } from "../helpers/ask-user-timeframe";
+import { fetchMetricsByFromDate } from "../helpers/fetch-metrics-by-from-date";
+import { groupMetrics } from "../helpers/group-metrics";
+import { log } from "../helpers/nice-logger";
 
 (async () => {
-  const { fromTimestamp, toTimestamp } = await askUserForTimeframe();
+  const toTimestamp = Date.now();
+  const { fromTimestamp } = await askUserForTimeframe(toTimestamp);
 
   const metrics = await fetchMetricsByFromDate(fromTimestamp);
   const uniqueMetricsNames = [...new Set(metrics.map((metric) => metric.name))];
