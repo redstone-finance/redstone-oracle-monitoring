@@ -6,6 +6,15 @@ import { log } from "../utils/nice-logger";
 (async () => {
   const { fromTimestamp, toTimestamp } = await askUserForTimeframe();
 
+  const analysis = await generateIssueAnalysis(fromTimestamp, toTimestamp);
+
+  log(analysis);
+})();
+
+export const generateIssueAnalysis = async (
+  fromTimestamp: number,
+  toTimestamp: number
+) => {
   const issues = await fetchIssuesByFromDate(fromTimestamp);
   const uniqueDataFeeds = [...new Set(issues.map((issue) => issue.dataFeedId))];
   const uniqueUrls = [...new Set(issues.map((issue) => issue.url))];
@@ -23,6 +32,4 @@ import { log } from "../utils/nice-logger";
     groupedByDataFeed,
     groupedByUrls,
   };
-
-  log(analysis);
-})();
+};
