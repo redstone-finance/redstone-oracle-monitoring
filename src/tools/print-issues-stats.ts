@@ -1,11 +1,10 @@
-const { connectToRemoteMongo } = require("../db-connector");
-const Issue = require("../models/issue");
+import { connectToRemoteMongo } from "../helpers/db-connector";
 
-async function main() {
+const main = async () => {
   await connectToRemoteMongo();
 
   // TODO: analyze
   // - during last 5 minutes
   // - during last hour
   // - during last 24 hours
-}
+};

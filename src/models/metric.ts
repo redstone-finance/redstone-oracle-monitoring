@@ -1,4 +1,4 @@
-const mongoose = require("mongoose");
+import mongoose from "mongoose";
 const Schema = mongoose.Schema;
 
 const MetricSchema = new Schema({
@@ -27,4 +27,4 @@ const MetricSchema = new Schema({
   },
 });
 
-module.exports = mongoose.model("Metric", MetricSchema);
+export const Metric = mongoose.model("Metric", MetricSchema);

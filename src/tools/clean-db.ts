@@ -1,14 +1,13 @@
-const { connectToRemoteMongo } = require("../db-connector");
-const Issue = require("../models/issue");
-const Mail = require("../models/mail");
-const Metric = require("../models/metric");
+import { Model } from "mongoose";
+import { connectToRemoteMongo } from "../helpers/db-connector";
+import { Issue } from "../models/issue";
+import { Mail } from "../models/mail";
+import { Metric } from "../models/metric";
 
 const MAX_COLLECTION_SIZE_TO_CLEAN = 1000000;
 const DB_DATA_TTL_HOURS = 24 * 14; // 2 weeks
 
-main();
-
-async function main() {
+(async () => {
   const oldTimestampCondition = {
     timestamp: {
       $lte: Date.now() - DB_DATA_TTL_HOURS * 3600 * 1000,
@@ -17,9 +16,18 @@ async function main() {
   await tryCleanCollection(Issue, oldTimestampCondition);
   await tryCleanCollection(Metric, oldTimestampCondition);
   await tryCleanCollection(Mail, oldTimestampCondition);
+})();
+
+interface OldTimestampCondition {
+  timestamp: {
+    $lte: number;
+  };
 }
 
-async function tryCleanCollection(model, query) {
+const tryCleanCollection = async (
+  model: Model<any>,
+  query: OldTimestampCondition
+) => {
   await connectToRemoteMongo();
   const collectionSize = await model.countDocuments(query).exec();
   if (collectionSize > MAX_COLLECTION_SIZE_TO_CLEAN) {
@@ -38,4 +46,4 @@ async function tryCleanCollection(model, query) {
     console.log("Done");
     process.exit();
   }
-}
+};

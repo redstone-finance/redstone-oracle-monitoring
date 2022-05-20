@@ -1,4 +1,4 @@
-const mongoose = require("mongoose");
+import mongoose from "mongoose";
 const Schema = mongoose.Schema;
 
 const MailSchema = new Schema({
@@ -8,4 +8,4 @@ const MailSchema = new Schema({
   },
 });
 
-module.exports = mongoose.model("Mail", MailSchema);
+export const Mail = mongoose.model("Mail", MailSchema);

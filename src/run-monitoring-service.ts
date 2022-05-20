@@ -1,12 +1,13 @@
-const schedule = require("node-schedule");
-const consola = require("consola");
-const redstone = require("redstone-api-extended");
+import schedule from "node-schedule";
+import consola from "consola";
+import redstone from "redstone-api-extended";
 
-const config = require("./config");
-const { connectToRemoteMongo } = require("./helpers/db-connector");
-const emailNotifierJob = require("./jobs/email-notifier-job");
-const dataFeedCheckerJob = require("./jobs/data-feed-checker-job");
-const singleSourceCheckerJob = require("./jobs/single-source-checker-job");
+import { emailNotifierJobSchedule, dataFeedsToCheck } from "./config";
+import { connectToRemoteMongo } from "./helpers/db-connector";
+import { execute as executeEmailNotifierJob } from "./jobs/email-notifier-job";
+import { execute as executeDataFeedCheckerJob } from "./jobs/data-feed-checker-job";
+import { execute as executeSingleSourceCheckerJob } from "./jobs/single-source-checker-job";
+import { DataFeedId } from "redstone-api-extended/lib/oracle/redstone-data-feed";
 
 const logger = consola.withTag("run-monitoring-service");
 
@@ -19,20 +20,17 @@ function runMonitoringService() {
 
   // Starting email notifier job
   logger.info("Starting the email notifier job");
-  schedule.scheduleJob(
-    config.emailNotifierJobSchedule,
-    emailNotifierJob.execute
-  );
+  schedule.scheduleJob(emailNotifierJobSchedule, executeEmailNotifierJob);
 
   // Starting data feed checker jobs
-  for (const dataFeed of config.dataFeedsToCheck) {
+  for (const dataFeed of dataFeedsToCheck) {
     // Starting job for checking whole data package fetching
     // (without specified symbol)
     if (dataFeed.checkWithoutSymbol) {
       logger.info(`Starting data feed checker job for: ${dataFeed.id}`);
       schedule.scheduleJob(dataFeed.schedule, () =>
-        dataFeedCheckerJob.execute({
-          dataFeedId: dataFeed.id,
+        executeDataFeedCheckerJob({
+          dataFeedId: dataFeed.id as DataFeedId,
         })
       );
     }
@@ -44,8 +42,8 @@ function runMonitoringService() {
           `Starting data feed checker job for: ${dataFeed.id} with symbol: ${symbol}`
         );
         schedule.scheduleJob(dataFeed.schedule, () =>
-          dataFeedCheckerJob.execute({
-            dataFeedId: dataFeed.id,
+          executeDataFeedCheckerJob({
+            dataFeedId: dataFeed.id as DataFeedId,
             symbol,
           })
         );
@@ -55,13 +53,13 @@ function runMonitoringService() {
     // Starting jobs for each single source
     if (dataFeed.checkEachSingleSource) {
       const dataFeedSourcesConfig = redstone.oracle.getDefaultDataSourcesConfig(
-        dataFeed.id
+        dataFeed.id as DataFeedId
       );
       for (const source of dataFeedSourcesConfig.sources) {
         logger.info(`Starting single source checker job for: ${dataFeed.id}`);
         schedule.scheduleJob(dataFeed.schedule, () =>
-          singleSourceCheckerJob.execute({
-            dataFeedId: dataFeed.id,
+          executeSingleSourceCheckerJob({
+            dataFeedId: dataFeed.id as DataFeedId,
             minTimestampDiffForWarning: dataFeed.minTimestampDiffForWarning,
             sourcesConfig: {
               ...dataFeedSourcesConfig,
