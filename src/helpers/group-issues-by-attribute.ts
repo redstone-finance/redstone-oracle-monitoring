@@ -22,10 +22,8 @@ export const groupIssuesByAttribute = (
 
         if (issue.type === "data-feed-failed") {
           numberOfDataFeedFailed++;
-          break;
         } else if (issue.type === "one-source-failed") {
           numberOfOneSourceFailed++;
-          break;
         } else if (issue.type === "timestamp-diff") {
           numberOfTimestampDiff++;
         }
