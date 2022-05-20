@@ -13,7 +13,7 @@ const ERRORS_LIMIT = 5;
 
 const logger = consola.withTag("email-notifier-job");
 
-// Counts warnings and errors for the last 3 hours
+// Counts warnings and errors for the last period of time
 export const execute = async () => {
   const currentTimestamp = Date.now();
   const minTimestamp = currentTimestamp - MIN_MAIL_INTERVAL;
