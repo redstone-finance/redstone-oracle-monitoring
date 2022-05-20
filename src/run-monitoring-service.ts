@@ -3,7 +3,10 @@ import consola from "consola";
 import redstone from "redstone-api-extended";
 
 import { emailNotifierJobSchedule, dataFeedsToCheck } from "./config";
-import { connectToRemoteMongo } from "./helpers/db-connector";
+import {
+  connectToRemoteMongo,
+  disconnectFromRemoteMongo,
+} from "./helpers/db-connector";
 import { execute as executeEmailNotifierJob } from "./jobs/email-notifier-job";
 import { execute as executeDataFeedCheckerJob } from "./jobs/data-feed-checker-job";
 import { execute as executeSingleSourceCheckerJob } from "./jobs/single-source-checker-job";
@@ -17,6 +20,8 @@ function runMonitoringService() {
   // Connect to mongoDB
   logger.info("Connecting to MongoDB");
   connectToRemoteMongo();
+
+  subscribeMonitoringExit();
 
   // Starting email notifier job
   logger.info("Starting the email notifier job");
@@ -70,4 +75,22 @@ function runMonitoringService() {
       }
     }
   }
+}
+
+function subscribeMonitoringExit() {
+  process.on("beforeExit", async () => {
+    await disconnectFromRemoteMongo();
+  });
+
+  process.on("SIGINT", async () => {
+    await disconnectFromRemoteMongo();
+    process.exit(0);
+  });
+
+  process.on("uncaughtException", async (error) => {
+    await disconnectFromRemoteMongo();
+    logger.error("Uncaught Exception:");
+    logger.error(error.stack);
+    process.exit(1);
+  });
 }
