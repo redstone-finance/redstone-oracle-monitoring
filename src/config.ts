@@ -20,6 +20,7 @@ export const emailNotificationsRecipients = getFromEnv(
 export const mongoDbUrl = getFromEnv("MONGO_DB_URL");
 export const metricsUrl = getFromEnv("METRICS_URL");
 export const emailNotifierJobSchedule = "*/10 * * * * *"; // Every 10 seconds
+export const dbTtlInDays = Number(getFromEnv("DB_DATA_TTL_DAYS"));
 export const dataFeedsToCheck = [
   {
     id: "redstone",
@@ -75,5 +76,3 @@ export const telegramConfig = {
   token: getFromEnv("TELEGRAM_TOKEN"),
   chatId: getFromEnv("TELEGRAM_CHAT_ID"),
 };
-
-export const dbTtlInDays = getFromEnv("DB_DATA_TTL_DAYS");

@@ -1,8 +1,5 @@
+import { Model } from "mongoose";
 import consola from "consola";
-import {
-  connectToRemoteMongo,
-  disconnectFromRemoteMongo,
-} from "../helpers/db-connector";
 import { dbTtlInDays } from "../config";
 import { Metric } from "../models/metric";
 import { Issue } from "../models/issue";
@@ -12,39 +9,35 @@ const ONE_DAY_IN_MILLISECONDS = 3600 * 1000 * 24;
 
 export const execute = async () => {
   const logger = consola.withTag(`db-cleaner`);
-  await connectToRemoteMongo();
   logger.info(`Cleaning records older than ${dbTtlInDays} from db`);
   const currentTimestamp = Date.now();
-  const ttlAsNumber = Number(dbTtlInDays);
-  const toTimestamp = currentTimestamp - ttlAsNumber * ONE_DAY_IN_MILLISECONDS;
-  const { removedMetricsCount, removedIssuesCount, removedMailsCount } =
-    await removeRecordsOfEachModel(toTimestamp);
-  logger.info(
-    `Removed: ${removedMetricsCount} metrics, ${removedIssuesCount} issues, ${removedMailsCount} mails`
-  );
-  await disconnectFromRemoteMongo();
+  const toTimestamp = currentTimestamp - dbTtlInDays * ONE_DAY_IN_MILLISECONDS;
+  const removedCount = await removeRecordsOfEachModel(toTimestamp);
+  const { metrics, issues, mails } = removedCount;
+  logger.info(`Removed: ${metrics} metrics, ${issues} issues, ${mails} mails`);
 };
 
 const removeRecordsOfEachModel = async (toTimestamp: number) => {
-  const removedMetricsResult = await Metric.deleteMany({
-    timestamp: {
-      $lte: toTimestamp,
-    },
-  });
-  const removedIssuesResult = await Issue.deleteMany({
-    timestamp: {
-      $lte: toTimestamp,
-    },
-  });
-  const removedMailsResult = await Mail.deleteMany({
-    timestamp: {
-      $lte: toTimestamp,
-    },
-  });
-
-  return {
-    removedMetricsCount: removedMetricsResult.deletedCount,
-    removedIssuesCount: removedIssuesResult.deletedCount,
-    removedMailsCount: removedMailsResult.deletedCount,
+  const removedModelsCount = {
+    metrics: 0,
+    issues: 0,
+    mails: 0,
   };
+  for (const model of [Metric, Issue, Mail]) {
+    const removedCount = await removeOldRecordsForModel(model, toTimestamp);
+    removedModelsCount[model.collection.collectionName] = removedCount;
+  }
+  return removedModelsCount;
+};
+
+export const removeOldRecordsForModel = async <T>(
+  model: Model<T>,
+  toTimestamp: number
+) => {
+  const deleteResult = await model.deleteMany({
+    timestamp: {
+      $lte: toTimestamp,
+    },
+  });
+  return deleteResult.deletedCount;
 };
