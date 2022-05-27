@@ -65,7 +65,7 @@ export const execute = async ({
     }
   } catch (e) {
     const errStr = stringifyError(e);
-    logger.error(`Error occured: ${errStr}. Saving issue in DB`);
+    logger.error(`Error occurred: ${errStr}. Saving issue in DB`);
     await new Issue({
       timestamp: currentTimestamp,
       type: "one-source-failed",
