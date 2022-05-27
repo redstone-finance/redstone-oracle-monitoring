@@ -10,4 +10,4 @@ or
 
 ## Running
 
-`node ./src/run-monitoring-service.js`
+`ts-node ./src/run-monitoring-service.ts`
