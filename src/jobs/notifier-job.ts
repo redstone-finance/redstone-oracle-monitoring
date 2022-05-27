@@ -23,12 +23,12 @@ export const execute = async () => {
     return;
   }
 
-  const errors = await Issue.countDocuments({
+  const errorsCount = await Issue.countDocuments({
     timestamp: { $gte: minTimestamp },
     level: "ERROR",
   });
 
-  const warnings = await Issue.countDocuments({
+  const warningsCount = await Issue.countDocuments({
     timestamp: { $gte: minTimestamp },
     level: "WARNING",
   });
@@ -48,8 +48,16 @@ export const execute = async () => {
     "Here is a short report from redstone-node-monitoring tool\n" +
     JSON.stringify(
       {
-        errors,
-        warnings,
+        errors: errorsCount,
+        warnings: warningsCount,
+        mongoQueryForErrors: {
+          timestamp: { $gte: minTimestamp, $lte: currentTimestamp },
+          level: "ERROR",
+        },
+        mongoQueryForWarnings: {
+          timestamp: { $gte: minTimestamp, $lte: currentTimestamp },
+          level: "WARNING",
+        },
         lastErrors,
         issuesAnalysis,
       },
@@ -57,27 +65,52 @@ export const execute = async () => {
       2
     );
 
-  let subject = "",
-    shouldSend = true;
-  if (errors > 0) {
-    subject = `[RedStone node monitoring] - please check ${errors} errors`;
-  } else if (warnings > 0) {
-    subject =
-      errors > 0
-        ? `${subject} and ${warnings} warnings`
-        : `[RedStone node monitoring] - please check ${warnings} warnings`;
-  } else {
-    shouldSend = false;
-  }
-
-  if (shouldSend) {
-    logger.info("Sending new email notification");
-    const sentEmailReport = await notifyByEmail(subject, message);
-    const sentTelegramReport = await notifyByTelegram(subject, message);
-    await new Mail({ timestamp: currentTimestamp }).save();
-    logger.info("Email sent: " + JSON.stringify(sentEmailReport));
-    logger.info("Telegram message sent: " + JSON.stringify(sentTelegramReport));
+  const shouldNotify = errorsCount > 0 || warningsCount > 0;
+  if (shouldNotify) {
+    await sendEmailNotification(
+      errorsCount,
+      warningsCount,
+      message,
+      currentTimestamp
+    );
+    await sendTelegramNotification(errorsCount, warningsCount);
   } else {
     logger.info("No new notifications to send. Skipping...");
   }
+};
+
+const getEmailSubject = (errorsCount: number, warningsCount: number) => {
+  let subject = "";
+  if (errorsCount > 0) {
+    subject = `[RedStone node monitoring] - please check ${errorsCount} errors`;
+  } else if (warningsCount > 0) {
+    subject =
+      errorsCount > 0
+        ? `${subject} and ${warningsCount} warnings`
+        : `[RedStone node monitoring] - please check ${warningsCount} warnings`;
+  }
+  return subject;
+};
+
+const sendEmailNotification = async (
+  errorsCount: number,
+  warningsCount: number,
+  message: string,
+  currentTimestamp: number
+) => {
+  const subject = getEmailSubject(errorsCount, warningsCount);
+  logger.info("Sending new email notification");
+  const sentEmailReport = await notifyByEmail(subject, message);
+  await new Mail({ timestamp: currentTimestamp }).save();
+  logger.info("Email sent: " + JSON.stringify(sentEmailReport));
+};
+
+const sendTelegramNotification = async (
+  errorsCount: number,
+  warningsCount: number
+) => {
+  logger.info("Sending new email notification");
+  const telegramMessage = `Errors: ${errorsCount}, Warnings: ${warningsCount}`;
+  await notifyByTelegram(telegramMessage);
+  logger.info("Telegram message sent: " + JSON.stringify(telegramMessage));
 };
