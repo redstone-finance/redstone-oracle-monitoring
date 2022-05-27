@@ -3,10 +3,6 @@ import { Issue } from "../models/issue";
 import { Mail } from "../models/mail";
 import { notify } from "../notifiers/email-notifier-mailgun";
 import { generateIssueAnalysis } from "../tools/analyze-issue";
-import {
-  connectToRemoteMongo,
-  disconnectFromRemoteMongo,
-} from "../helpers/db-connector";
 
 const MIN_MAIL_INTERVAL = 3 * 3600 * 1000; // 3 hours
 const ERRORS_LIMIT = 5;
@@ -17,7 +13,6 @@ const logger = consola.withTag("email-notifier-job");
 export const execute = async () => {
   const currentTimestamp = Date.now();
   const minTimestamp = currentTimestamp - MIN_MAIL_INTERVAL;
-  await connectToRemoteMongo();
 
   const lastSentMailCount = await Mail.countDocuments({
     timestamp: { $gte: minTimestamp },
@@ -82,6 +77,4 @@ export const execute = async () => {
   } else {
     logger.info("No new notifications to send. Skipping...");
   }
-
-  await disconnectFromRemoteMongo();
 };
