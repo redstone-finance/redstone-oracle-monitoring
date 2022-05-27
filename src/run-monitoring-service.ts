@@ -1,7 +1,6 @@
 import schedule from "node-schedule";
 import consola from "consola";
 import redstone from "redstone-api-extended";
-
 import { emailNotifierJobSchedule, dataFeedsToCheck } from "./config";
 import { connectToRemoteMongo } from "./helpers/db-connector";
 import { execute as executeEmailNotifierJob } from "./jobs/email-notifier-job";
