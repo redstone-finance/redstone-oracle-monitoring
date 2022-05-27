@@ -1,5 +1,4 @@
 import { Model } from "mongoose";
-import { connectToRemoteMongo } from "../helpers/db-connector";
 
 export const fetchByFromDate = async <T>(
   model: Model<T>,
@@ -11,7 +10,6 @@ export const fetchByFromDate = async <T>(
     },
   };
 
-  await connectToRemoteMongo();
   const issues = await model.find(fromTimestampCondition);
   return issues;
 };

@@ -1,16 +1,15 @@
 import consola from "consola";
-
 import { Issue } from "../models/issue";
 import { Mail } from "../models/mail";
 import { notify } from "../notifiers/email-notifier-mailgun";
+import { generateIssueAnalysis } from "../tools/analyze-issues";
 
 const MIN_MAIL_INTERVAL = 3 * 3600 * 1000; // 3 hours
-const MONGO_DASHBOARD_URL = "https://todo.implement.dashboard/";
 const ERRORS_LIMIT = 5;
 
 const logger = consola.withTag("email-notifier-job");
 
-// Counts warnings and errors for the last 6 minutes
+// Counts warnings and errors for the last period of time
 export const execute = async () => {
   const currentTimestamp = Date.now();
   const minTimestamp = currentTimestamp - MIN_MAIL_INTERVAL;
@@ -38,6 +37,11 @@ export const execute = async () => {
     level: "ERROR",
   }).limit(ERRORS_LIMIT);
 
+  const issuesAnalysis = await generateIssueAnalysis(
+    minTimestamp,
+    currentTimestamp
+  );
+
   const message =
     "Hello devs!\n\n" +
     "Here is a short report from redstone-node-monitoring tool\n" +
@@ -45,16 +49,8 @@ export const execute = async () => {
       {
         errors,
         warnings,
-        url: MONGO_DASHBOARD_URL,
-        mongoQueryForErrors: {
-          timestamp: { $gte: minTimestamp, $lte: currentTimestamp },
-          level: "ERROR",
-        },
-        mongoQueryForWarnings: {
-          timestamp: { $gte: minTimestamp, $lte: currentTimestamp },
-          level: "WARNING",
-        },
         lastErrors,
+        issuesAnalysis,
       },
       null,
       2
@@ -63,9 +59,12 @@ export const execute = async () => {
   let subject = "",
     shouldSend = true;
   if (errors > 0) {
-    subject = `[ERROR] - (V2) please check ${errors} errors`;
+    subject = `[RedStone node monitoring] - please check ${errors} errors`;
   } else if (warnings > 0) {
-    subject = `[WARNING] - (V2) please check ${warnings} warnings`;
+    subject =
+      errors > 0
+        ? `${subject} and ${warnings} warnings`
+        : `[RedStone node monitoring] - please check ${warnings} warnings`;
   } else {
     shouldSend = false;
   }
