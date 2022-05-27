@@ -2,7 +2,7 @@ import consola from "consola";
 import { Issue } from "../models/issue";
 import { Mail } from "../models/mail";
 import { notify } from "../notifiers/email-notifier-mailgun";
-import { generateIssueAnalysis } from "../tools/analyze-issue";
+import { generateIssueAnalysis } from "../tools/analyze-issues";
 
 const MIN_MAIL_INTERVAL = 3 * 3600 * 1000; // 3 hours
 const ERRORS_LIMIT = 5;
