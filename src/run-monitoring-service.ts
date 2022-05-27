@@ -3,7 +3,7 @@ import consola from "consola";
 import redstone from "redstone-api-extended";
 import { emailNotifierJobSchedule, dataFeedsToCheck } from "./config";
 import { connectToRemoteMongo } from "./helpers/db-connector";
-import { execute as executeEmailNotifierJob } from "./jobs/email-notifier-job";
+import { execute as executeEmailNotifierJob } from "./jobs/notifier-job";
 import { execute as executeDataFeedCheckerJob } from "./jobs/data-feed-checker-job";
 import { execute as executeSingleSourceCheckerJob } from "./jobs/single-source-checker-job";
 import { DataFeedId } from "redstone-api-extended/lib/oracle/redstone-data-feed";
