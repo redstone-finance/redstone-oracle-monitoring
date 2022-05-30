@@ -18,7 +18,7 @@
     "open": "^8.4.0",
     "plotly": "^1.0.6",
     "prompts": "^2.4.2",
-    "redstone-api-extended": "^1.0.9"
+    "redstone-api-extended": "^1.0.10"
   },
   "devDependencies": {
     "@types/mailgun-js": "^0.22.12",
