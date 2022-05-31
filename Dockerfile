@@ -8,6 +8,8 @@ RUN yarn
 
 COPY . .
 
+RUN yarn build
+
 ENV MONGO_DB_URL=
 ENV METRICS_URL=
 ENV MAILGUN_DOMAIN=
