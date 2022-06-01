@@ -2,10 +2,13 @@ const plotly = require("plotly")("hatskier", "vyujwn0zVNWbWR73W5Jh");
 import open from "open";
 import prompts from "prompts";
 import { askUserForTimeframe } from "../helpers/ask-user-timeframe";
+import { connectToRemoteMongo } from "../helpers/db-connector";
 import { fetchByFromDate } from "../helpers/fetch-by-from-date";
 import { Metric } from "../models/metric";
 
 (async () => {
+  await connectToRemoteMongo();
+
   const toTimestamp = Date.now();
   const { fromTimestamp } = await askUserForTimeframe(toTimestamp);
   const metrics = await fetchByFromDate<Metric>(Metric, fromTimestamp);
@@ -49,5 +52,6 @@ import { Metric } from "../models/metric";
     }
     console.log(message);
     await open(message.url);
+    process.exit(); // It will handle closing DB connection
   });
 })();
