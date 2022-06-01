@@ -10,6 +10,5 @@ export const fetchByFromDate = async <T>(
     },
   };
 
-  const issues = await model.find(fromTimestampCondition);
-  return issues;
+  return await model.find(fromTimestampCondition);
 };

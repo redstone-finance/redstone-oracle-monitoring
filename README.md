@@ -10,7 +10,9 @@ or
 
 ## Running
 
-`ts-node ./src/run-monitoring-service.ts`
+`ts-node ./backend/src/run-monitoring-service.ts`
+
+Frontend app will be served on `http://localhost:3000`
 
 ## Telegram integration
 

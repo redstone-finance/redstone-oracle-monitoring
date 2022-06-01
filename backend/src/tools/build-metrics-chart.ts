@@ -5,13 +5,14 @@ import { askUserForTimeframe } from "../helpers/ask-user-timeframe";
 import { connectToRemoteMongo } from "../helpers/db-connector";
 import { fetchByFromDate } from "../helpers/fetch-by-from-date";
 import { Metric } from "../models/metric";
+import { Metric as MetricType } from "../../../shared/types";
 
 (async () => {
   await connectToRemoteMongo();
 
   const toTimestamp = Date.now();
   const { fromTimestamp } = await askUserForTimeframe(toTimestamp);
-  const metrics = await fetchByFromDate<Metric>(Metric, fromTimestamp);
+  const metrics = await fetchByFromDate<MetricType>(Metric, fromTimestamp);
   const uniqueMetricsNames = [...new Set(metrics.map((metric) => metric.name))];
 
   const response = await prompts({

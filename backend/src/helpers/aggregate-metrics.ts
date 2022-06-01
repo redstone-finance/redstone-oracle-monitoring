@@ -21,15 +21,5 @@ export const aggregateMetricsQuery = (fromTimestamp: number) => {
     {
       $sort: { numberOfSavedValues: -1 },
     },
-    {
-      $project: {
-        _id: 0,
-        dataFeedId: "$_id",
-        min: "$min",
-        max: "$max",
-        avg: "$avg",
-        numberOfSavedValues: "$numberOfSavedValues",
-      },
-    },
   ]);
 };

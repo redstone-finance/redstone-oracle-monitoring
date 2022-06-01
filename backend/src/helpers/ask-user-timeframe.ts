@@ -1,8 +1,9 @@
 import prompts from "prompts";
-
-const ONE_HOUR_IN_MILLISECONDS = 3600 * 1000;
-const WEEK_IN_HOURS = 24 * 7;
-const MONTH_IN_HOURS = 24 * 30;
+import {
+  MONTH_IN_HOURS,
+  HOUR_IN_MILLISECONDS,
+  WEEK_IN_HOURS,
+} from "../../../shared/constants";
 
 export const askUserForTimeframe = async (toTimestamp: number) => {
   const response = await prompts({
@@ -18,7 +19,7 @@ export const askUserForTimeframe = async (toTimestamp: number) => {
     initial: 0,
   });
   const timeFrameInHours = response.timeFrame;
-  const timestampDiff = timeFrameInHours * ONE_HOUR_IN_MILLISECONDS;
+  const timestampDiff = timeFrameInHours * HOUR_IN_MILLISECONDS;
   const fromTimestamp = toTimestamp - timestampDiff;
 
   return { fromTimestamp, toTimestamp };
