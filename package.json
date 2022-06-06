@@ -13,7 +13,7 @@
     "build": "yarn frontend:build && yarn backend:build",
     "lint": "eslint",
     "dev": "yarn frontend:build && yarn backend:dev",
-    "start": "yarn frontend:build && yarn backend:start",
+    "start": "yarn frontend:build && yarn backend:build && yarn backend:start",
     "prepare": "husky install"
   },
   "dependencies": {},

@@ -2,7 +2,7 @@
   "license": "MIT",
   "scripts": {
     "build": "rm -rf dist && tsc",
-    "start": "node ./dist/src/run-monitoring-service.js",
+    "start": "node ./dist/backend/src/run-monitoring-service.js",
     "dev": "ts-node ./src/run-monitoring-service.ts"
   },
   "dependencies": {

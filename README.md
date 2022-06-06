@@ -10,9 +10,23 @@ or
 
 ## Running
 
+In order to run monitoring service environment variables are required. Examples are inside backend and frontend folders. The simplest way is to create `.env` files in both folders and populate with desired values.
+
+Then run:
+
 `ts-node ./backend/src/run-monitoring-service.ts`
 
 Frontend app will be served on `http://localhost:3000`
+
+## Docker running
+
+`Dockerfile` is prepared in order to make usage of monitoring service easier. It can be found in main folder. In order to make it run environment variables inside file need to be populate. Then run following command in main folder to build Docker image:
+
+`docker build -t oracle-monitoring .`
+
+To start docker:
+
+`docker run -p 127.0.0.1:3000:3000 oracle-monitoring`
 
 ## Telegram integration
 
