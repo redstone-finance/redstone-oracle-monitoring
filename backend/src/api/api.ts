@@ -20,6 +20,6 @@ export const startApi = () => {
   });
 
   app.listen(port, () => {
-    console.log(`Custom URL manifest updater stared at port: ${port}`);
+    console.log(`Oracle monitoring API stared at port: ${port}`);
   });
 };

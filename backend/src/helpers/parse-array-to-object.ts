@@ -1,5 +1,5 @@
 export const parseArrayToObject = (array: any[]) =>
-  array.reduce((object, item) => {
-    const { _id, ...rest } = item;
-    return { ...object, [_id]: rest };
+  array.reduce((accumulatedObject, currentItem) => {
+    const { _id, ...rest } = currentItem;
+    return { ...accumulatedObject, [_id]: rest };
   }, {});
