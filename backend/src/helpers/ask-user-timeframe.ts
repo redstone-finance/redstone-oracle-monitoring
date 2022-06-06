@@ -3,6 +3,7 @@ import {
   MONTH_IN_HOURS,
   HOUR_IN_MILLISECONDS,
   WEEK_IN_HOURS,
+  TWO_WEEKS_IN_HOURS,
 } from "../../../shared/constants";
 
 export const askUserForTimeframe = async (toTimestamp: number) => {
@@ -14,6 +15,7 @@ export const askUserForTimeframe = async (toTimestamp: number) => {
       { title: "Last hour", value: 1 },
       { title: "Last day", value: 24 },
       { title: "Last week", value: WEEK_IN_HOURS },
+      { title: "Last two weeks", value: TWO_WEEKS_IN_HOURS },
       { title: "Last month", value: MONTH_IN_HOURS },
     ],
     initial: 0,

@@ -17,6 +17,7 @@ import {
   DAY_IN_MILLISECONDS,
   HOUR_IN_MILLISECONDS,
   MONTH_IN_MILLISECONDS,
+  TWO_WEEKS_IN_MILLISECONDS,
   WEEK_IN_MILLISECONDS,
 } from "../../../shared/constants";
 import { SelectOption } from "../types";
@@ -33,6 +34,10 @@ const timeframesOptions = [
   {
     value: WEEK_IN_MILLISECONDS,
     label: "One week",
+  },
+  {
+    value: TWO_WEEKS_IN_MILLISECONDS,
+    label: "Two weeks",
   },
   {
     value: MONTH_IN_MILLISECONDS,
