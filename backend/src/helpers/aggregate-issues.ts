@@ -1,23 +1,5 @@
 import { Issue } from "../models/issue";
 
-export const generateIssueAnalysis = async (
-  fromTimestamp: number,
-  toTimestamp: number
-) => {
-  const groupedByDataFeed = await aggregateIssuesByAttribute(
-    fromTimestamp,
-    "dataFeedId"
-  );
-  const groupedByUrls = await aggregateIssuesByAttribute(fromTimestamp, "url");
-
-  return {
-    fromTimestamp: `${fromTimestamp} ${new Date(fromTimestamp)}`,
-    toTimestamp: `${toTimestamp} ${new Date(toTimestamp)}`,
-    groupedByDataFeed,
-    groupedByUrls,
-  };
-};
-
 export const aggregateIssuesByAttribute = (
   fromTimestamp: number,
   attributeName: keyof Issue
@@ -52,8 +34,6 @@ export const aggregateIssuesByAttribute = (
     },
     {
       $project: {
-        _id: 0,
-        url: "$_id",
         errors: "$errors",
         warnings: "$warnings",
         groupedByType: {

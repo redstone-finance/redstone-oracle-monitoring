@@ -7,6 +7,7 @@ import { execute as notifierJob } from "./jobs/notifier-job";
 import { execute as executeDataFeedCheckerJob } from "./jobs/data-feed-checker-job";
 import { execute as executeSingleSourceCheckerJob } from "./jobs/single-source-checker-job";
 import { DataFeedId } from "redstone-api-extended/lib/oracle/redstone-data-feed";
+import { startApi } from "./api/api";
 
 const logger = consola.withTag("run-monitoring-service");
 
@@ -16,6 +17,8 @@ function runMonitoringService() {
   // Connect to mongoDB
   logger.info("Connecting to MongoDB");
   connectToRemoteMongo();
+
+  startApi();
 
   // Starting email notifier job
   logger.info("Starting the email notifier job");

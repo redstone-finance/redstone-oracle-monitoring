@@ -1,5 +1,5 @@
 import consola from "consola";
-import { generateIssueAnalysis } from "../helpers/aggregate-issues";
+import { generateIssuesAnalysis } from "../tools/generate-issues-analysis";
 import { Issue } from "../models/issue";
 import { Mail } from "../models/mail";
 import { notify as notifyByEmail } from "../notifiers/email-notifier-mailgun";
@@ -38,7 +38,7 @@ export const execute = async () => {
     level: "ERROR",
   }).limit(ERRORS_LIMIT);
 
-  const issuesAnalysis = await generateIssueAnalysis(
+  const issuesAnalysis = await generateIssuesAnalysis(
     minTimestamp,
     currentTimestamp
   );

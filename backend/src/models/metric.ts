@@ -1,17 +1,8 @@
 import mongoose from "mongoose";
+import { Metric as MetricType } from "../../../shared/types";
 const Schema = mongoose.Schema;
 
-export interface Metric {
-  name: string;
-  value: number;
-  timestamp: number;
-  tags: {
-    dataFeedId?: string;
-    evmSignerAddress?: string;
-  };
-}
-
-const MetricSchema = new Schema<Metric>({
+const MetricSchema = new Schema<MetricType>({
   name: {
     type: String,
     required: true,
