@@ -1,9 +1,9 @@
 import schedule from "node-schedule";
 import consola from "consola";
 import redstone from "redstone-api-extended";
-import { emailNotifierJobSchedule, dataFeedsToCheck } from "./config";
+import { notifierJobSchedule, dataFeedsToCheck } from "./config";
 import { connectToRemoteMongo } from "./helpers/db-connector";
-import { execute as executeEmailNotifierJob } from "./jobs/notifier-job";
+import { execute as notifierJob } from "./jobs/notifier-job";
 import { execute as executeDataFeedCheckerJob } from "./jobs/data-feed-checker-job";
 import { execute as executeSingleSourceCheckerJob } from "./jobs/single-source-checker-job";
 import { DataFeedId } from "redstone-api-extended/lib/oracle/redstone-data-feed";
@@ -19,7 +19,7 @@ function runMonitoringService() {
 
   // Starting email notifier job
   logger.info("Starting the email notifier job");
-  schedule.scheduleJob(emailNotifierJobSchedule, executeEmailNotifierJob);
+  schedule.scheduleJob(notifierJobSchedule, notifierJob);
 
   // Starting data feed checker jobs
   for (const dataFeed of dataFeedsToCheck) {
