@@ -11,7 +11,7 @@ backend/node_modules/
 .npm
 
 frontend/.env
-backend/.env
 frontend/.parcel-cache
 frontend/dist
 backend/dist
+.env
