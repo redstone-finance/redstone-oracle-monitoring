@@ -13,10 +13,10 @@ const logger = consola.withTag("run-monitoring-service");
 
 runMonitoringService();
 
-function runMonitoringService() {
+async function runMonitoringService() {
   // Connect to mongoDB
   logger.info("Connecting to MongoDB");
-  connectToRemoteMongo();
+  await connectToRemoteMongo();
 
   startApi();
 
