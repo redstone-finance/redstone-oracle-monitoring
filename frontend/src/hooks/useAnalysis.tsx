@@ -17,7 +17,7 @@ export const useAnalysis = (
   const metricsNamesQuery = useQuery<MetricNamesResponse>(
     "metricsNames",
     async () => {
-      const url = `${backendUrl}/metrics-names`;
+      const url = `${backendUrl}/metrics/metrics-names`;
       const response = await fetch(url);
       return response.json();
     },
