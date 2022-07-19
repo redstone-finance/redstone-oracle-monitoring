@@ -1,4 +1,5 @@
 import { Model } from "mongoose";
+import { dbTtlInDays } from "../config";
 import { connectToRemoteMongo } from "../helpers/db-connector";
 import { removeOldRecordsForModel } from "../jobs/db-cleaner-job";
 import { Issue } from "../models/issue";
@@ -6,7 +7,7 @@ import { Mail } from "../models/mail";
 import { Metric } from "../models/metric";
 
 const MAX_COLLECTION_SIZE_TO_CLEAN = 1000000;
-const DB_DATA_TTL_DAYS = 14;
+const DB_DATA_TTL_DAYS = dbTtlInDays;
 const DB_DATA_TTL_TIMESTAMP = 3600 * 1000 * 24 * DB_DATA_TTL_DAYS;
 
 (async () => {

@@ -1,4 +1,5 @@
-require("dotenv").config();
+import dotenv from "dotenv";
+dotenv.config();
 
 function getFromEnv(envName: string) {
   const valueFromEnv = process.env[envName];

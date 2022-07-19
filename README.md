@@ -10,11 +10,11 @@ or
 
 ## Running
 
-In order to run monitoring service environment variables are required. Examples are inside backend and frontend folders. The simplest way is to create `.env` files in both folders and populate with desired values.
+In order to run monitoring service environment variables are required. The simplest way is to create `.env` files in main folder and populate with desired values based on `.env.example`
 
 Then run:
 
-`ts-node ./backend/src/run-monitoring-service.ts`
+`yarn dev`
 
 Frontend app will be served on `http://localhost:3000`
 
