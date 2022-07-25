@@ -26,7 +26,8 @@
   "scripts": {
     "populate-env": "grep -a -m 1 -h -r 'BACKEND_URL' ../.env | head -1 > .env",
     "dev": "rm -rf .parcel-cache && yarn populate-env && parcel index.html",
-    "build": "yarn populate-env && parcel build index.html"
+    "build": "yarn populate-env && parcel build index.html",
+    "docker:build": "parcel build index.html"
   },
   "eslintConfig": {
     "extends": [
