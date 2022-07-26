@@ -4,7 +4,7 @@
     "backend:install": "cd backend && yarn",
     "frontend:install": "cd frontend && yarn",
     "backend-nest:install": "cd backend-nest && yarn",
-    "postinstall": "yarn backend:install && yarn frontend:install && yarn backend-nest:install",
+    "postinstall": "yarn backend:install && yarn frontend:install",
     "frontend:dev": "cd frontend && yarn dev",
     "frontend:build": "cd frontend && yarn build",
     "frontend:docker:build": "cd frontend && yarn docker:build",
