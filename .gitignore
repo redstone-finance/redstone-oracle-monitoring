@@ -11,3 +11,5 @@ dist
 .parcel-cache/
 
 yarn-error.log
+
+redstone-evm-examples

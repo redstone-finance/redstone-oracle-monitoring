@@ -1,0 +1,38 @@
+[
+  {
+    "id": "redstone-avalanche-prod",
+    "checkWithoutSymbol": true,
+    "dataFeedsToCheck": [
+      "AVAX",
+      "PNG",
+      "TJ_AVAX_USDC_LP",
+      "YY_PNG_AVAX_USDC_LP"
+    ],
+    "checkEachSingleUrl": true,
+    "minTimestampDiffForWarning": 40000,
+    "schedule": "*/20 * * * * *",
+    "urls": [
+      "https://oracle-gateway-1.a.redstone.finance",
+      "https://oracle-gateway-2.a.redstone.finance"
+    ],
+    "uniqueSignersCount": 5,
+    "dataFeedsToCheckDeviation": {
+      "AVAX": {
+        "timePeriodInMilliseconds": 600000,
+        "deviationLimitToNotify": 10
+      },
+      "PNG": {
+        "timePeriodInMilliseconds": 600000,
+        "deviationLimitToNotify": 10
+      },
+      "TJ_AVAX_USDC_LP": {
+        "timePeriodInMilliseconds": 600000,
+        "deviationLimitToNotify": 10
+      },
+      "YY_PNG_AVAX_USDC_LP": {
+        "timePeriodInMilliseconds": 600000,
+        "deviationLimitToNotify": 10
+      }
+    }
+  }
+]

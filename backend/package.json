@@ -1,34 +1,82 @@
 {
+  "name": "oracle-monitoring-backend",
+  "version": "1.0.0",
   "license": "MIT",
+  "private": true,
   "scripts": {
-    "build": "rm -rf dist && tsc",
-    "start": "node ./dist/backend/src/run-monitoring-service.js",
-    "dev": "ts-node ./src/run-monitoring-service.ts"
+    "prebuild": "rimraf dist",
+    "build": "nest build",
+    "format": "prettier --write \"src/**/*.ts\" \"test/**/*.ts\"",
+    "start": "nest start",
+    "start:dev": "nest start --watch --webpack",
+    "start:debug": "nest start --debug --watch --webpack",
+    "start:prod": "node dist/backend/src/main",
+    "lint": "eslint \"{src,apps,libs,test}/**/*.ts\" --fix",
+    "test": "jest",
+    "test:watch": "jest --watch",
+    "test:cov": "jest --coverage",
+    "test:debug": "node --inspect-brk -r tsconfig-paths/register -r ts-node/register node_modules/.bin/jest --runInBand",
+    "test:e2e": "jest --config ./test/jest-e2e.json"
   },
   "dependencies": {
-    "aws-sdk": "^2.1061.0",
-    "axios": "^0.24.0",
-    "consola": "^2.15.3",
+    "@nestjs/axios": "^0.1.0",
+    "@nestjs/common": "^9.0.11",
+    "@nestjs/config": "^2.2.0",
+    "@nestjs/core": "^9.0.11",
+    "@nestjs/mongoose": "^9.2.2",
+    "@nestjs/platform-express": "^9.0.11",
+    "@nestjs/schedule": "^2.1.0",
+    "@nestjs/serve-static": "^3.0.0",
     "cors": "^2.8.5",
     "dotenv": "^16.0.1",
-    "mailgun-js": "^0.22.0",
-    "mongoose": "^6.1.6",
-    "node-schedule": "^2.1.0",
-    "node-telegram-bot-api": "^0.57.0",
-    "open": "^8.4.0",
-    "plotly": "^1.0.6",
-    "prompts": "^2.4.2",
-    "redstone-api-extended": "^1.0.10"
+    "mongoose": "^6.5.2",
+    "redstone-sdk": "*",
+    "reflect-metadata": "^0.1.13",
+    "rimraf": "^3.0.2",
+    "rxjs": "^7.4.0"
   },
   "devDependencies": {
-    "@types/cors": "^2.8.12",
-    "@types/mailgun-js": "^0.22.12",
+    "@nestjs/cli": "^9.0.0",
+    "@nestjs/schematics": "^9.0.1",
+    "@nestjs/testing": "^9.0.11",
+    "@types/cron": "^2.0.0",
+    "@types/express": "^4.17.13",
+    "@types/jest": "^27.0.2",
+    "@types/node": "^16.11.1",
     "@types/node-schedule": "^2.1.0",
     "@types/node-telegram-bot-api": "^0.57.1",
     "@types/prompts": "^2.0.14",
-    "prettier": "^2.6.2",
-    "pretty-quick": "^3.1.3",
-    "ts-node": "^10.7.0",
-    "typescript": "^4.6.3"
+    "@types/supertest": "^2.0.11",
+    "@typescript-eslint/eslint-plugin": "^4.29.2",
+    "@typescript-eslint/parser": "^4.29.2",
+    "eslint": "^7.32.0",
+    "eslint-config-prettier": "^8.3.0",
+    "eslint-plugin-prettier": "^4.2.1",
+    "jest": "^27.3.0",
+    "prettier": "^2.4.1",
+    "source-map-support": "^0.5.20",
+    "supertest": "^6.1.6",
+    "ts-jest": "^27.0.7",
+    "ts-loader": "^9.2.6",
+    "ts-node": "^10.3.0",
+    "tsconfig-paths": "^3.11.0",
+    "typescript": "^4.4.4"
+  },
+  "jest": {
+    "moduleFileExtensions": [
+      "js",
+      "json",
+      "ts"
+    ],
+    "rootDir": "src",
+    "testRegex": ".*\\.spec\\.ts$",
+    "transform": {
+      "^.+\\.(t|j)s$": "ts-jest"
+    },
+    "collectCoverageFrom": [
+      "**/*.(t|j)s"
+    ],
+    "coverageDirectory": "../coverage",
+    "testEnvironment": "node"
   }
 }

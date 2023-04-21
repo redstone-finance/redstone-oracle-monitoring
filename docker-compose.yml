@@ -7,9 +7,8 @@ services:
     ports:
       - 27017:27017
     volumes:
-      - ~/apps/mongo:/data/db
+      - ~/apps/mongo:/app/data/db
   monitoring:
-    image: monitoring
     build:
       context: .
       dockerfile: Dockerfile
@@ -18,3 +17,13 @@ services:
     depends_on:
       - mongodb
     restart: on-failure
+    environment:
+      - UPTIME_KUMA_URL=http://localhost:3001/api/push/T4nk2B3y72?status=up
+  uptime-kuma:
+    image: louislam/uptime-kuma:1
+    container_name: uptime-kuma
+    volumes:
+      - ~/apps/uptime-kuma:/app/data
+    ports:
+      - 3001:3001
+    restart: always

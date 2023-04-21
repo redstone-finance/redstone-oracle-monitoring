@@ -1,28 +1,31 @@
 {
   "license": "MIT",
+  "name": "oracle-monitoring",
+  "version": "1.0.0",
+  "private": true,
   "scripts": {
-    "backend:install": "cd backend && yarn",
-    "frontend:install": "cd frontend && yarn",
-    "backend-nest:install": "cd backend-nest && yarn",
+    "backend:install": "cd backend && yarn install --frozen-lockfile",
+    "frontend:install": "cd frontend && yarn install --frozen-lockfile",
     "postinstall": "yarn backend:install && yarn frontend:install",
     "frontend:dev": "cd frontend && yarn dev",
     "frontend:build": "cd frontend && yarn build",
     "frontend:docker:build": "cd frontend && yarn docker:build",
     "backend:test": "cd backend && yarn test",
-    "backend:dev": "cd backend && yarn dev",
+    "backend:dev": "cd backend && yarn start",
     "backend:build": "cd backend && yarn build",
-    "backend:start": "cd backend && yarn start",
-    "backend:nest:dev": "cd backend-nest && yarn start:dev",
-    "backend:nest:build": "cd backend-nest && yarn build",
-    "backend:nest:start": "cd backend-nest && yarn start",
+    "backend:start": "cd backend && yarn start:prod",
     "build": "yarn frontend:build && yarn backend:build",
     "lint": "eslint",
-    "dev": "yarn frontend:build && yarn backend:nest:dev",
-    "start": "yarn frontend:build && yarn backend:build && yarn backend:start",
-    "prepare": "husky install"
+    "dev": "yarn frontend:build && yarn backend:dev",
+    "start": "yarn frontend:build && yarn backend:build && yarn backend:start"
   },
-  "dependencies": {},
-  "devDependencies": {
-    "husky": "^8.0.0"
+  "dependencies": {
+    "redstone-sdk": "*"
+  },
+  "workspaces": {
+    "packages": [
+      "./backend",
+      "./frontend"
+    ]
   }
 }

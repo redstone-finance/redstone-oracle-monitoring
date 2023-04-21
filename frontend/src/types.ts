@@ -15,9 +15,11 @@ export interface IssuesResponse {
       dataFeedId: string;
       errors: number;
       groupedByType: {
-        "data-feed-failed": number;
-        "one-source-failed": number;
+        "data-service-failed": number;
+        "one-url-failed": number;
         "timestamp-diff": number;
+        "no-data-package": number;
+        "invalid-signers-number": number;
       };
       warnings: number;
     }[];
@@ -25,9 +27,11 @@ export interface IssuesResponse {
       url: string;
       errors: number;
       groupedByType: {
-        "data-feed-failed": number;
-        "one-source-failed": number;
+        "data-service-failed": number;
+        "one-url-failed": number;
         "timestamp-diff": number;
+        "no-data-package": number;
+        "invalid-signers-number": number;
       };
       warnings: number;
     }[];
